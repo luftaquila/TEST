@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ko" class="">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta http-equiv="Content-Script-Type" content="text/javascript">
+      <meta name="referrer" content="always">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0, user-scalable=yes">
+      <meta name="format-detection" content="telephone=no,address=no,email=no">
+      <meta property="og:title" content="영통구 원천동 미세먼지 : 네이버 통합검색"/>
+      <meta property="og:image" content="https://ssl.pstatic.net/sstatic/search/common/og_v3.png">
+      <meta property="og:description" content="'영통구 원천동 미세먼지'의 네이버 통합검색 결과입니다.">
+      <meta name="description" lang="ko" content="'영통구 원천동 미세먼지'의 네이버 통합검색 결과입니다.">
+      <title>영통구 원천동 미세먼지 : 네이버 통합검색</title>
+      <link rel="shortcut icon" href="https://ssl.pstatic.net/sstatic/search/favicon/favicon_140327.ico">
+      <style type="text/css"> noscript_disp { display: none; } </style>
+      <link rel="apple-touch-icon-precomposed" sizes="1024x1024" href="https://ssl.pstatic.net/sstatic/search/favicon/favicon_1024x1024_140328.png" />
+      <noscript>
+         <style type="text/css"> noscript_disp { display: block; } </style>
+      </noscript>
+      <script> document.domain = "naver.com" ; document.documentElement.setAttribute('data-useragent', window.navigator.userAgent.toLowerCase()) ; document.documentElement.setAttribute('data-platform', window.navigator.platform.toLowerCase()) ; </script> <script> naver = window.naver || {}; naver.search = naver.search || {}; if (!String.prototype.trim) { String.prototype.trim = function () { return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ''); }; } function urlencode (q) { return escape(q).replace(/\+/g, "%2B") ; } function urlexpand (url) { var href = document.location.href ; if (url == "") return href ; if (url.match(/^[-.A-Za-z]+:/)) return url ; if (url.charAt(0) == '#') return href.split("#")[0] + url ; if (url.charAt(0) == '?') return href.split("?")[0] + url ; if (url.charAt(0) == '/') return href.replace(/([^:\/])\/.*$/, "$1") + url ; return href.substring(0, href.lastIndexOf("/")+1) + url ; } naver.search.error = (function () { var errorList = Array(); return { add : function (s) { errorList.push(s); }, clear : function () { delete errorList; }, get : function (s) { return errorList; }, getString : function (d) { if (typeof d === 'undefined') d = '|'; return errorList.join(d); } } })(); var nx_localstorage = { get_error : function(s) { return naver.search.error.getString(); }, }; naver.search.cookie = (function () { return { set : function (key, value, expire, domain) { var cookie = key + "=" + escape(value); if (typeof expire !== 'undefined') { if (expire instanceof Date) { cookie = cookie + "; expires=" + expire.toUTCString(); } else { var exdate = new Date((new Date()).getTime() + expire*1000); cookie = cookie + "; expires=" + exdate.toUTCString(); } } cookie = cookie + "; path=/"; if (domain != null) { cookie = cookie + "; domain=" + domain; } document.cookie = cookie; }, get : function (key) { var cookie_list = document.cookie.split(/\s*;\s*/); for (var i = 0; i < cookie_list.length; i++) { var tmp_list = cookie_list[i].split("="); var c_key = tmp_list[0].trim(); var c_value = tmp_list[1]; if (key == c_key) { return unescape(c_value); } } return null; } } })(); naver.search.localStorage = (function () { var EOF = "/* EOF */" ; var resourceInfo ; var updatedResource = false ; var tags = new Array() ; function isValid (data) { var s = data.substr(data.length - (EOF.length + 3)) ; if (s.indexOf(EOF) > 0) return true ; return false ; } function loadResourceInfo () { var a = naver.search.cookie.get("nx_res") ; if (a) { resourceInfo = a.split(',') ; } else { resourceInfo = new Array() ; } } function existResource (name, checkSum) { if (typeof resourceInfo === 'undefined') return false ; var a = name + "=" + checkSum ; for (var i = 0; i < resourceInfo.length; i++) { if (resourceInfo[i] == a) return true ; } return false ; } function getIndexResourceInfo (name) { if (typeof resourceInfo === 'undefined') return -1 ; var a = name + "=" ; for (var i = 0; i < resourceInfo.length; i++) { if (resourceInfo[i].indexOf(a) == 0) return i ; } return -1 ; } function setResourceInfo (name, checkSum) { var i = getIndexResourceInfo(name) ; var a = name + "=" + checkSum ; if (i >= 0) { resourceInfo[i] = a ; } else { resourceInfo.push(a) ; } updatedResource = true ; } function updatedResourceInfo () { return updatedResource ; } function saveResourceInfo () { var a = resourceInfo.toString() ; naver.search.cookie.set("nx_res", a, undefined, "search.naver.com") ; } function loadResource (url, name, checkSum, onLoad, onFallback, doValidation) { try { var nameKey = "rn_" + name ; var dataKey = "rd_" + name ; if (url.indexOf("//") != 0) { url = urlexpand(url) ; } /* for test css/js */ if (0 && (url.search(/^n.search.naver.com/) || url.search(/^\w*:\/\/([^:/?]*\.|)*naver\.(?:net|com)/) == -1 || url.search(/^\w*:\/\/dev\.ui\.naver\.com/))) { onFallback(name, url) ; return ; } if (!window.localStorage) { onFallback(name, url) ; return ; } var lsName = window.localStorage.getItem(nameKey) ; var lsData = window.localStorage.getItem(dataKey) ; if (lsName == url && lsData) { if (getIndexResourceInfo(name) == -1) setResourceInfo(name, checkSum) ; onLoad(name, lsData) ; return ; } var oAjax ; if (window.XMLHttpRequest) { oAjax = new window.XMLHttpRequest ; oAjax.open("GET", url, false) ; oAjax.send() ; tags.push(name + ".XMLHttpRequest") ; if (oAjax.readyState == 4) { if (oAjax.status == 200) { var resData = oAjax.responseText ; if (!doValidation || isValid(resData)) { window.localStorage.setItem(nameKey, url); window.localStorage.setItem(dataKey, resData); setResourceInfo(name, checkSum); onLoad(name, resData); naver.search.error.add(nameKey + ":s"); } else { onFallback(name, url + (url.indexOf("?") == -1 ? "?" : "&") + "__time=" + (new Date()).getTime()) ; naver.search.error.add(nameKey + ":e:netdata=" + resData.length); } } else { onFallback(name, url) ; naver.search.error.add(nameKey + ":e:rsp=" + oAjax.status); } } else { onFallback(name, url) ; naver.search.error.add(name_key + ":e:state=" + oAjax.readyState); } } else { onFallback(name, url) ; naver.search.error.add(name_key + ":e:noajax"); } } catch (e) { onFallback(name, url) ; naver.search.error.add(nameKey + ":e:" + e.toString()); return ; } } return { getTags : function () { return tags ; }, loadCSS : function (url, name, checkSum, doValidation) { if (typeof doValidation === 'undefined') doValidation = true; loadResource(url, name, checkSum, function (name, data) { var sheet = document.createElement('style') ; sheet.type = 'text/css'; if (sheet.innerHTML != 'undefined') sheet.innerHTML = data; else sheet.styleSheet.cssText = data; document.getElementsByTagName("head")[0].appendChild(sheet); tags.push(name + ".onLoad") ; }, function (name, url) { document.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + url + "\">") ; tags.push(name + ".onFallback") ; }, doValidation); }, loadJS : function (url, name, checkSum, doValidation) { if (typeof doValidation === 'undefined') doValidation = true; loadResource(url, name, checkSum, function (name, data) { document.write("<script>" + data + "</scr" + "ipt>") ; tags.push(name + ".onLoad") ; }, function (name, url) { document.write("<script src=\"" + url + "\"></scr" + "ipt>") ; tags.push(name + ".onFallback") ; }, doValidation); }, loadInfo : function () { loadResourceInfo(); }, saveInfo : function () { if (updatedResourceInfo()) { var l = [ "m_cn_w", "m_cd_w", "m_cn_e", "m_cd_e", "m_jn_nx", "m_jd_nx" ]; if (typeof localStorage != 'undefined') { for (var i = 0; i < l.length; i++) { localStorage.removeItem(l[i]); } } saveResourceInfo(); } } } })(); naver.search.https = window.location.protocol == "https:"; naver.search.meta_referrer = 1; /* XXX */ (function(){ if (window.localStorage) { for (var i = window.localStorage.length ; i > 0;) { var k = window.localStorage.key(--i) ; var j = k.substring(0,3) ; if (j == "rd_" || j == "rn_") window.localStorage.removeItem(k) ; } } })(); </script> <script src="https://ssl.pstatic.net/sstatic/au/m/_nx/2018/nx_0510.js"></script> <script> function nx_add_event_handler (event, func) { $Fn(func).attach(document, event) ; } </script>
+      <style type="text/css"> ._nx_disp_control { display:none; } </style>
+      <script> function nx_img_lazyload () { var fn; var scroll_timer; function _get_top (el) { var top = el.offsetTop; var parent = el.offsetParent; if (parent) { top += _get_top(parent); } return top; } function _get_viewport () { var y = window.pageYOffset; var h = window.innerHeight; return { y: y, h: h }; } function img_lazyload_update () { if (scroll_timer) { /* console.log('scroll timer cancelled.'); */ window.clearTimeout(scroll_timer); } /* console.log('scroll timer fired.'); */ scroll_timer = window.setTimeout(function() { img_lazyload_update_do(); }, 10); } function img_lazyload_update_do () { scroll_timer = null; var viewport = _get_viewport(); var h_buffer = 200; var deferred_imgs = $$('img[data-src]'); for (var i = 0; i < deferred_imgs.length; i++) { var img = deferred_imgs[i]; var top = _get_top(img); var lazy = img.getAttribute('data-lazy-load'); if ((!lazy || top != 0) && top < h_buffer + viewport.y + viewport.h && top > viewport.y - h_buffer) { img.setAttribute('src', img.getAttribute('data-src')); img.removeAttribute('data-src') ; } } } var deferred_imgs = $$('img[data-src]'); for (var i = 0; i < deferred_imgs.length; i++) { var img = deferred_imgs[i]; var top = _get_top(img); var lazy = img.getAttribute('data-lazy-load'); if (!lazy && top == 0) { img.setAttribute('src', img.getAttribute('data-src')); img.removeAttribute('data-src') ; } } fn = $Fn(img_lazyload_update, this); if (nx_mobile_agent == '1' && g_m_ver == '7.0' && g_inapp) { fn.attach(window, 'touchend'); } else { fn.attach(window, 'scroll'); } fn.attach(window, 'resize'); jindo.m.bindRotate($Fn(img_lazyload_update, this).bind()); jindo.m.bindPageshow($Fn(img_lazyload_update, this).bind()); window.setTimeout(function() { img_lazyload_update_do(); }, 10); } var nx_dcll = (function() { var isAttached = 0; return function() { if (!isAttached) { setTimeout(function() { nx_img_lazyload() ; }, 10) ; } isAttached = 1; }; })(); jindo.$Fn(function() { nx_dcll(); }).attach(window, "load"); setTimeout(function() { nx_dcll(); }, 6000); </script> <script> //IE6.0 flicker prevent -BackgroundImageCache inactivation
+         try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {}  naver = window.naver || {}; naver.search = naver.search || {}; naver.search.ext = naver.search.ext || {}; naver.search.map_api = { v3 : "https://ssl.pstatic.net/sstatic.map/openapi/maps3.js" } ; var g_D = 0 ; var nx_mobile_agent = 8 ; var headerfooter_query = "영통구 원천동 미세먼지" ; var headerfooter_query_encoded = "%BF%B5%C5%EB%B1%B8+%BF%F8%C3%B5%B5%BF+%B9%CC%BC%BC%B8%D5%C1%F6" ; var headerfooter_query_encoded_utf8 = "%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" ; var headerfooter_time_year = 2018 ; var headerfooter_time_month = 5 ; var headerfooter_time_day = 30 ; var headerfooter_time_hour = 11 ; var headerfooter_time_minute = 27 ; var headerfooter_time_second = 24 ; var headerfooter_time_wday = 3 ; /* day of week (0: sunday) */ var headerfooter_time_year_s = "2018" ; var headerfooter_time_month_s = "05" ; var headerfooter_time_day_s = "30" ; var headerfooter_time_hour_s = "11" ; var headerfooter_time_minute_s = "27" ; var headerfooter_time_second_s = "24" ; var headerfooter_time_wday_s = "3" ; /* day of week (0: sunday) */ var g_ssc = "tab.m.all" ; var g_query = headerfooter_query_encoded ; var g_url_query = "" ; var g_puid = "TwGKvspySCwsssd4yqhssssstIw-287937" ; var g_suid = "VFO7dkpAYLIykcU3M7z1xg==" ; var g_tab = "m" ; var g_stab = "m" ; var g_crt = "" ; var g_m_str = "" ; var g_m_ver = "8.0" ; var g_inapp = 0 ; var g_inapp_ver = 0 ; var g_nx_cookie_expire_date = new Date("Jan 1, 2050") ; var g_nx_font_size = 1 ; var g_nx_splugin ; var g_nx_likeit_controller ; var g_nx_app_next_button = 0 ; window.onerror = function (e) { if (! e) e = window.event ; if (! g_D) { window.status = e ; } return ! g_D ; } ; function isOutlink (u) { if (!u || u.indexOf("://") < 0) return false; var b = (u.search(/^\w*:\/\/([^:/?]*\.|)*(?!(ad)?cr\.)[^.:/?]+\.+naver\.com(:\d*)?(\/|$)/) < 0);  return b; } function nxGetCRURL (m, a, b, c, d, e) { var p = "" ; var u ; if (c==undefined && d==undefined && e==undefined) { p = (a==undefined?"":"&"+a) + (b==undefined || a.indexOf("u=")==0 || a.indexOf("&u=") > 0 ?"":"&u="+urlencode(b)) ; u = b ; } else { p = (a==undefined ? "" : "&a="+urlencode(a)) + (b==undefined ? "" : "&r="+urlencode(b)) + (c==undefined ? "" : "&i="+urlencode(c)) + (d==undefined ? "" : "&u="+urlencode(d)) + (e==undefined ? "" : "&"+e) ; u = d ; } if (! p) return null ; var url ; if (naver.search.https) { url = (naver.search.meta_referrer ? "/p/crd" : "/p/cr") + "/rd"; if (m != 0) m = 1; } else { out = isOutlink(u); url = "http://cr.naver.com" + (g_D && out ? "/nr" : "/rd"); if (m != 0) m = g_D && out ? 2 : 1; } url += "?m=" + m + "&" + cpip() + "&" + nxGetCommonCRParam() + p; return url; } function tCR (a, b, c, d, e) { setTimeout(function() { var l = nxGetCRURL(0, a, b, c, d, e) ; var cr = getCRRanking(l) ; if (cr > 0) l = l + "&cr=" + cr ; if (document.images) (new Image()).src = l ; else document.location = l ; }, 100) ; return false ; } function gCR (u, a, r, i, e, t) { if (u) u = urlexpand(u) ; var l = nxGetCRURL(1, a, r, i, u, e) ; var o = document.createElement("a") ; var cr = getCRRanking(l) ; if (cr > 0) l = l + "&cr=" + cr ; if (o.click) { if (t) o.target = t; else { if (u) o.href = u ;  } o.href = l ; o.style.display = "none" ; document.body.appendChild(o) ; o.click() ; } else document.location = l ; } function goCR (o, l, p, t) { var u = o.href ; if (p.indexOf("u=javascript") >= 0 || p.indexOf("u=tel%3A") >= 0) t = true ; /* no frame/iframe but new window */ var n = (o.ownerDocument==document && o.target && o.target!="_self" && o.target!="_parent" && o.target!="_top") ; var cr = getCRRanking(p) ; if (cr > 0) p = p + "&cr=" + cr ;  if (!(u && o.getAttribute("crurl"))) { if (0 && u && u.indexOf("/search.naver?") >= 0) { var str = "" ;    p = p.replace(/(((?:^|&)u=).*\/search.naver%3F[^&]*)/, '$1' + str) ; } u = nxGetCRURL(t?0:(n?-1:1), p, u) ; } if (u && !u.match(/m=0&/)) { var a = o.innerHTML ;  if (g_D && naver.search.https && naver.search.meta_referrer && o.href && isOutlink(o.href)) o.setAttribute("rel", "noreferrer"); o.href = u ; o.setAttribute("crurl", "1"); if (o.innerHTML != a) o.innerHTML = a ; } else if (document.images) (new Image()).src = u ; return true ; } var onload_post = ""; function nx_init () { var bottomForm = document.getElementsByName("searchu")[0] ; var bottomInput = null ; if (bottomForm != undefined) bottomInput = bottomForm.query ; if (bottomInput) { bottomInput.disabled = true ; window.addEventListener("scroll", function() { bottomInput.disabled = window.pageYOffset<=100 ; }, false) ; } window.onerror = null, window.status = "" ; try { eval(onload_post) ; } catch(e) { if (g_D) raise(e) ; } ; return true ; } function document_write (s) { document.write(s) ; } function nx_selectFontSize (btn, inc) { var htmlElem = $Element(document.getElementsByTagName("html")[0]) ; var btnYOffset = $Element(btn)._element.offsetTop ; var pageYOffset = btnYOffset - window.pageYOffset ; g_nx_font_size += inc ? +1 : -1 ; if (g_nx_font_size < 1) g_nx_font_size = 1 ; if (g_nx_font_size > 5) g_nx_font_size = 5 ; if (inc) { tCR('a=fot.bigtype') ; $Element("btn_font_small").removeClass("dimmed"); if (g_nx_font_size == 5) $Element("btn_font_large").addClass("dimmed"); } else { tCR('a=fot.smalltype') ; $Element("btn_font_large").removeClass("dimmed"); if (g_nx_font_size == 1) $Element("btn_font_small").addClass("dimmed"); } htmlElem.removeClass("fzoom") ; htmlElem.removeClass("fzoom2") ; htmlElem.removeClass("fzoom3") ; htmlElem.removeClass("fzoom4") ; switch(g_nx_font_size) { case 2: htmlElem.addClass("fzoom") ; break ; case 3: htmlElem.addClass("fzoom2") ; break ; case 4: htmlElem.addClass("fzoom3") ; break ; case 5: htmlElem.addClass("fzoom4") ; break ; } var btnYOffset2 = $Element(btn)._element.offsetTop ; window.scrollTo(window.pageXOffset, btnYOffset2 - pageYOffset) ; if (g_nx_font_size) nx_set_cookie("NFS", g_nx_font_size, g_nx_cookie_expire_date, "naver.com") ; else nx_set_cookie("NFS", g_nx_font_size, new Date(new Date().getTime() - 86400), "naver.com") ; if (typeof oPageLayoutUI != "undefined") { oPageLayoutUI.refresh(); } return false ; } function openRTKeyword () { window.location.href = "naversearchapp://newsearch?action=ranklist"; } window.addEventListener("load", function() { nx_lcs.send({"pid": "TwGKvspySCwsssd4yqhssssstIw-287937"}) }, false) ; /* VisibleManager 관련 초기화 코드 */ (function () { var vm = new nhn.mobile.common.VisibleManager(document, {}); /* 이미지 레이지 로딩 관련 로직 초기화 */ vm.initImageLazyLoad(); /* 전역 변수 인터페이스 제공 */ nhn.mobile.gv.visibleManager = vm; nhn.mobile.gv.imageLazyLoader = vm.getImageLazyLoader(); /* 페이지 로드 후 가시영역 점검 */ window.addEventListener("load", function () { setTimeout(function () { vm.check(); }, 500); }); })(); (function () { nhn.common.load_js(null, function(){ var islOptions = { scroll: { capture: true, "interval": 300, "endDelay": 300 }, logFunction: window.tCR }; nhn.mobile.gv.innerScrollLog = new nhn.mobile.common.InnerScrollLog(document.body, islOptions); }, true, 150); }());
+      </script>
+      <div id='applinkDiv'></div>
+      <script> var oAutoComplete, oKeywordHistory; nx_js_defer_load("https://ssl.pstatic.net/sstatic/au/m/search_bar/nhn.mobile.search_bar_180517.js", function(){ nhn.mobile.search_bar.search_init({ sAPIURL : "//mac.search.naver.com/mobile/ac", bIsLogin : true }); }, 150); </script>
+      <link rel="stylesheet" type="text/css" href="https://ssl.pstatic.net/sstatic/search/mobile/css/w_new_180524.css">
+   </head>
+   <body class="a api_animation" onload="nx_init();">
+      <script> (function () { window.g_nx_lp_event = (function () { var store = new eg.Component(); var state; return { trigger: function (s) { if (state !== s) { state = s; store.trigger(s); } }, on: function (s, f) { if (state === s) { f(); } store.on(s, f); }, off: function (s, f) { store.off(s, f); } }; })(); var fnOnLoadLpJs = function () { window.g_nx_lp = new nhn.mobile.common.layeredPage.Controller(); g_nx_lp.active(); }; function checkLayeredPageUrl() { var oHashObject = jindo.$S(location.hash.substr(1)).parseString(); return oHashObject._lp_type === "cm"; } var sJavascriptFile = "https://ssl.pstatic.net/sstatic/au/m/layeredPage/nhn.mobile.common.layeredPage_180503.js"; if (checkLayeredPageUrl()) { nx_lcs.set_direct_lp(); g_nx_lp_event.trigger("open"); var $body = jQuery(document.body); $body.addClass("_lp_show"); setTimeout(function () { $body.removeClass("_lp_show"); }, 5000); var elScript = document.createElement("script"); elScript.setAttribute("src", sJavascriptFile); elScript.addEventListener("load", fnOnLoadLpJs); window.addEventListener("DOMContentLoaded", function(){ document.body.appendChild(elScript); }); } else { g_nx_lp_event.trigger("close"); nx_js_defer_load(sJavascriptFile, fnOnLoadLpJs, 150); } }()); </script>
+      <div id="u_skip" class="u_skip"><a href="#ct">본문 바로가기</a></div>
+      <header>
+         <div class="header _header">
+            <div id="_sch" class="sch">
+               <section class="_section">
+                  <div class="sch_w _sch_w">
+                     <h1 class="lg_h"> <a href="http://m.naver.com/" class="lg_a" onclick="return goOtherCR(this, 'a=gnb.logo&amp;r=&amp;i=&amp;u='+urlencode(this.href));" target="_self"><i class="spnew ico_naver">NAVER</i></a> </h1>
+                     <form name="search" role="search" method="get" action="?" onsubmit="if(oKeywordHistory){oKeywordHistory.add(document.querySelector('#nx_query').value)};"> <span class="sch_inpw _sch_inpw"> <span class="sch_inpw_in _sch_inpw_in"> <span class="sch_inp_inner"><input id="nx_query" type="search" name="query" class="sch_inp" maxlength="255" value="영통구 원천동 미세먼지" placeholder="검색어 입력" title="검색어 입력" autocorrect="off" autocapitalize="off" autocomplete="off"></span> <input type="hidden" name="sm" value="mtb_hty.top"> <input type="hidden" name="where" value="m"> <input type="hidden" name="oquery" value="영통구 원천동 미세먼지"> <input type="hidden" name="tqi" value="TwGKvspySCwsssd4yqhssssstIw-287937">        <button id="nx_input_clear" type="button" class="sch_btn sch_del" onclick="return tCR('a=sch.kwdx&amp;r=1');" style="display:block"><i class="spnew ico_del">입력 내용 삭제</i></button> <button type="button" class="sch_btn sch_mic" data-ios-scheme="naversearchapp" data-ios-query="search?qmenu=voicerecg&amp;version=26" data-ios-install="393499958" data-ios-universal-fullurl="https://naverapp.m.naver.com/?urlScheme=naversearchapp%3A%2F%2Fsearch%3Fqmenu%3Dvoicerecg%26version%3D26" data-android-scheme="naversearchapp" data-android-query="search?qmenu=voicerecg&amp;version=26" data-android-package="com.nhn.android.search" onclick="tCR('a=rcs.voice&amp;r=&amp;i=0&amp;u=');nhn.mobile.launchApp(this);return false;"><i class="spnew ico_mic">음성검색</i></button> <button type="button" class="sch_btn sch_lense" data-ios-scheme="naversearchapp" data-ios-query="search?qmenu=searchbyimage&amp;version=26" data-ios-install="393499958" data-ios-universal-fullurl="https://naverapp.m.naver.com/?urlScheme=naversearchapp%3A%2F%2Fsearch%3Fqmenu%3Dsearchbyimage%26version%3D26" data-android-scheme="naversearchapp" data-android-query="search?qmenu=searchbyimage&amp;version=26" data-android-package="com.nhn.android.search" onclick="tCR('a=rcs.image&amp;r=&amp;i=0&amp;u=');nhn.mobile.launchApp(this);return false;"><i class="spnew ico_lense">스마트렌즈</i></button> </span> <button type="submit" value="검색" class="sch_btn sch_submit" id="nx_search_btn"><i class="spnew ico_top_search">검색</i></button> </span> </form>
+                  </div>
+               </section>
+               <div class="u_atcp_wrap _u_atcp_wrap">
+                  <div id="nx_suggest_recent" class="u_sggt_wrap2" style="display:none">
+                     <div class="sggt_fixer _sggt_fixer">
+                        <div class="sggt_header">
+                           <h2 class="tit"><a href="https://m.help.naver.com/support/alias/search/word_m/word_m6.naver" class="tit_inner" onclick="goOtherCR(this, 'a=sxt.help&amp;r=&amp;i=&amp;u=' + urlencode(this.href));">최근 검색어<i class="imsc ico_help">도움말</i></a></h2>
+                        </div>
+                        <div class="sggt_container">
+                           <ul class="kwd_lst _kwd_lst">
+                              <li class="type_date" data-query="@in_txt@" data-rank="@rank@"> <a href="#" class="kwd" onclick="oKeywordHistory.select(event);"><span class="fix">@txt@</span></a> <em class="date">@date@.</em> <a href="#" role="button" class="bt_del" onclick="oKeywordHistory.remove(event);"><span class="imsc">삭제</span></a> </li>
+                           </ul>
+                           <div id="nx_suggest_recent_off" class="kwd_info kwd_off" style="display:none">검색어 저장 기능이 꺼져 있습니다.<br><span class="kwd_dsc">설정이 초기화된다면 <a href="https://m.help.naver.com/support/alias/search/word_m/word_m6.naver" class="kwd_help" onclick="goOtherCR(this, 'a=sxt.help&amp;r=&amp;i=&amp;u=' + urlencode(this.href));">도움말</a>을 확인해주세요.</span></div>
+                           <div id="nx_suggest_recent_nothing" class="kwd_info kwd_none" style="display:none">최근 검색어 내역이 없습니다.<br><span class="kwd_dsc">설정이 초기화된다면 <a href="https://m.help.naver.com/support/alias/search/word_m/word_m6.naver" class="kwd_help" onclick="goOtherCR(this, 'a=sxt.help&amp;r=&amp;i=&amp;u=' + urlencode(this.href));">도움말</a>을 확인해주세요.</span></div>
+                        </div>
+                        <div class="sggt_footer"> <span class="side_opt_area"> <span id="nx_suggest_recent_unuse" class="opt_off"><a href="javascript:;">자동저장 <span class="txt_off">끄기</span><span class="txt_on">켜기</span></a></span> <span class="opt_help"><a href="https://m.help.naver.com/support/alias/search/word_m/word_m6.naver" onclick="goOtherCR(this, 'a=sxt.help&amp;r=&amp;i=&amp;u=' + urlencode(this.href));">도움말</a></span> <span class="opt_del"><a id="nx_suggest_recent_clear" href="#" class="u_atcp_report">전체삭제</a></span> </span> <button type="button" id="nx_suggest_recent_close" class="u_atcp_fcb u_atcp_x">닫기</button> </div>
+                     </div>
+                  </div>
+                  <div id="nx_ac_layer" class="u_atcp_area" style="display:none">
+                     <script type="text/template" id="_atcp_answer_3"> <p class="atcp_crt atcp_lotto" onclick="oAutoComplete.selectAnswer(event, 3, true, '@1@', '@2@');"><a href="javascript:;" class="atcp_crt_a"><strong class="tit"><em>@5@</em>회차</strong><time datetime="@datetime@">@13@.</time><span class="lotto"><em class="n@6@">@6@</em><em class="n@7@">@7@</em><em class="n@8@">@8@</em><em class="n@9@">@9@</em><em class="n@10@">@10@</em><em class="n@11@">@11@</em><em class="imsc_bf bonus n@12@">@12@</em></span></a></p> </script> <script type="text/template" id="_atcp_answer_9"> <p class="atcp_crt atcp_crt_sm" onclick="oAutoComplete.selectAnswer(event, 9, true, '@1@', '@2@');"><a href="javascript:;" class="atcp_crt_a">@5@<span class="atcp_exchr_@11@"><strong class="atcp_exchr">@6@</strong>원 <span class="atcp_exchr_arrow">@10@</span>@8@(@9@%)</span><span class="atcp_exchr_pr">@7@</span></a></p> </script> <script type="text/template" id="_atcp_answer_11"> <p class="atcp_crt atcp_crt_sm" onclick="oAutoComplete.selectAnswer(event, 11, true, '@1@', '@2@');"><a href="javascript:;" class="atcp_crt_a">@14@<span class="atcp_weat">@7@ <strong class="atcp_weat_@12@">@8@<span class="atcp_weat_cels">&deg;c</span></strong> <span class="atcp_weat_bar">ㅣ</span> <span class="atcp_weat_fall">@9@ <strong class="atcp_weat_down_fall">@10@</strong><span class="atcp_weat_cels">@11@</span></span></span> <span class="atcp_weat_pr">@5@</span></a></p> </script> <script type="text/template" id="_atcp_answer_16"> <li class="u_atcp_l u_atcp_rcmmd" data-rank="@rank@" data-query="@query@"><a href="javascript:;" class="u_atcp_a" onclick="oAutoComplete.selectAnswer(event, 16, true, '@1@', '@2@');"><div class="u_atcp_ap"><mark class="u_atcp_mk">@txt@</mark> @intend@</div></a><button type="button" class="u_atcp_add" onclick="oAutoComplete.extendKeyword(event);"><span class="u_atcp_addb"><span class="u_vc">추가</span></span></button></li> </script> <script type="text/template" id="_atcp_answer_17"> <p class="atcp_crt atcp_url" onclick="oAutoComplete.selectAnswer(event, 17, false, '@1@', '@2@');"><a href="http://_5_" class="imsc_bf atcp_crt_a" onclick="goOtherCR(this, 'a=sug.ansdirect')"><span class="url">@5@</span><span class="atcp_crt_t">사이트로 이동</span></a></p> </script> <script type="text/template" id="_atcp_answer_10"> <p class="atcp_crt atcp_crt_sm" onclick="oAutoComplete.selectAnswer(event, 10, true, '@1@', '@2@');"><a href="javascript:;" class="atcp_crt_a">@14@<span class="atcp_weat">@7@ <strong class="atcp_weat_@12@">@8@<span class="atcp_weat_cels">&deg;c</span></strong> <span class="atcp_weat_bar">ㅣ</span> <span class="atcp_weat_fall">@9@ <strong class="atcp_weat_down_fall">@10@</strong><span class="atcp_weat_cels">@11@</span></span></span> <span class="atcp_weat_pr">@5@</span></a></p> </script>
+                     <div class="atcp_crt_w _atcp_answer_wrap"></div>
+                     <ul title="자동완성" class="u_atcp u_atcp_at _u_atcp">
+                        <li class="u_atcp_l" data-rank="@rank@" data-query="@in_txt@">
+                           <a href="javascript:;" class="u_atcp_a@link_css@@li_class@" onclick="oAutoComplete.select(event);">
+                              <div class="u_atcp_ap">@txt@</div>
+                           </a>
+                           <button type="button" class="u_atcp_add _u_atcp_add" style="display:@ex_btn@" onclick="oAutoComplete.extendKeyword(event);"><span class="u_atcp_addb"><span class="u_vc">추가</span></span></button> <button type="button" class="u_atcp_quick" style="display:@link_btn@" onclick="oAutoComplete.moveURL(event);">바로이동</button>
+                        </li>
+                     </ul>
+                     <div id="nx_ac_alert" class="u_atcp_alert" style="display:none;">
+                        <p class="imsc_bf dsc_txt">6.13 지방선거·국회의원선거 투표종료시까지 후보자명에 대한 자동완성검색어 노출이 중단됩니다. <a href="http://naver_diary.blog.me/221280929734" onclick="goOtherCR(this, 'a=sug.vote')">자세히보기</a></p>
+                     </div>
+                     <div class="u_atcp_plus is_opened _u_atcp_plus">
+                        <div class="switch"> <input type="checkbox" id="ck_plus1" aria-label="컨텍스트 자동완성"> <label for="ck_plus1" aria-hidden="true"><span></span></label> </div>
+                        <div class="layer_plus _layer_plus" style="display:none">
+                           <strong class="tit">컨텍스트 자동완성</strong>
+                           <p class="dsc _off_dsc"><em class="txt">동일한 시간대/연령/남녀별</em> 사용자 그룹의 관심사에<br>맞춰 자동완성을 제공합니다.</p>
+                           <p class="dsc _on_dsc" style="display:none">ON/OFF설정은<br>해당 기기(브라우저)에 저장됩니다.</p>
+                           <div class="btn_area"> <a href="https://nid.naver.com/nidlogin.login?svctype=262144&amp;url=https%3A%2F%2Fm.search.naver.com%2Fsearch.naver%3Fwhere%3Dm%26sm%3Dmtb_etc%26query%3D%25EC%2598%2581%25ED%2586%25B5%25EA%25B5%25AC%2520%25EC%259B%2590%25EC%25B2%259C%25EB%258F%2599%2520%25EB%25AF%25B8%25EC%2584%25B8%25EB%25A8%25BC%25EC%25A7%2580" class="btn btn_login _btn_login" onclick="goOtherCR(this, 'a=sug.cxlogin');">로그인</a> <a href="https://m.help.naver.com/support/alias/search/word_m/word_m10.naver" class="btn btn_view" onclick="goOtherCR(this, 'a=sug.cxlink');">자세히 보기</a> </div>
+                           <button type="button" class="btn_close _btn_close" onclick="return tCR('a=sug.cxhide')"><i class="imsc ico_close">컨텍스트 자동완성 레이어 닫기</i></button>
+                        </div>
+                        <div class="dsc_plus"> <a href="https://m.help.naver.com/support/alias/search/word_m/word_m1.naver" class="dsc_area" onclick="goOtherCR(this, 'a=sug.cxhelp');"><span class="dsc _dsc">시간대와 관심사에 맞춘 <em class="txt">컨텍스트 자동완성</em></span><span class="ico_help"><i class="imsc">도움말</i></span></a> </div>
+                     </div>
+                     <div class="u_atcp_fc"> <button id="nx_ac_toggle" type="button" class="u_atcp_fcb">자동완성 끄기</button> <span class="u_atcp_dv"></span> <a href="https://m.help.naver.com/support/alias/search/word_m/word_m2.naver" class="u_atcp_report" onclick="goOtherCR(this, 'a=sub.help');">도움말</a> <span class="u_atcp_dv"></span> <a href="https://m.help.naver.com/support/alias/search/word_m/word_m3.naver" class="u_atcp_report" onclick="goOtherCR(this, 'a=sug.report');">신고</a> <button id="nx_ac_layer_close" type="button" class="u_atcp_fcb u_atcp_x">닫기</button> </div>
+                  </div>
+               </div>
+            </div>
+            <script> var nx_usain_beacon = function($) { var sent = 0; var tags = []; var usain_obj = { send: function() { if (sent > 0) { return; } sent = 1; function getResourceTiming() { if (typeof(window.performance) == "undefined") { return ""} if (typeof(window.performance.getEntriesByType) == "undefined") { return ""} if (typeof(window.performance.timing) == "undefined") { return ""} var t = window.performance.timing; var e = window.performance.getEntriesByType("resource"); var onload = t.loadEventStart - t.navigationStart; var cached = {}; cached.css = cached.script = cached.img = 0; var noncached = {}; noncached.css = noncached.script = noncached.img = 0; function iscached(t) { return (t.duration == 0) } for (var i = 0 ; i < e.length; i++) { if (e[i].fetchStart >= onload) { break; } switch (e[i].initiatorType) { case "link": if (iscached(e[i])) { cached.css++; } else { noncached.css++; } break; case "img": case "css": if (iscached(e[i])) { cached.img++; } else { noncached.img++; } break; case "script": if (iscached(e[i])) { cached.script++; } else { noncached.script++; } break; default: break; } } var qstr = "rc=" + [cached.css , cached.script, cached.img].join(":") + "&rn=" + [noncached.css, noncached.script, noncached.img].join(":"); return qstr; }; setTimeout(function() { var perf = "" ; function _(t) { return (t?(t-window.performance.timing.navigationStart):0); } ; perf = (function() { function _(t) { return (t?(t-window.performance.timing.navigationStart):0); } ; if (typeof(window.performance) == "undefined") { return ""} if (typeof(window.performance.timing) == "undefined"){ return ""} if (typeof(window.performance.navigation) == "undefined"){ return ""} var t = window.performance.timing ; var n = window.performance.navigation ; return "navt=" + [_(t.navigationStart), _(t.unloadEventStart), _(t.unloadEventEnd), _(t.redirectStart), _(t.redirectEnd), _(t.fetchStart), _(t.domainLookupStart), _(t.domainLookupEnd), _(t.connectStart), _(t.connectEnd), _(t.requestStart), _(t.responseStart), _(t.responseEnd), _(t.domLoading), _(t.domInteractive), _(t.domContentLoadedEventStart), _(t.domContentLoadedEventEnd), _(t.domComplete), _(t.loadEventStart), _(t.loadEventEnd), n.type, n.redirectCount].join(":") ; }) () ; if (document.location.protocol === 'https:') { tags.push('_ssl'); } tags.push('p_'+'h2') ; var agent = eg.agent() ; if (agent.os.name === "android" || agent.os.name === "ios") { var version = ""; var vers = agent.os.version.split('.'); var os = '_' + agent.os.name.slice(0,3); var browser = (/NAVER/.test(navigator.userAgent)) || (window.g_inapp && window.g_inapp === 1) ? '_app' : '_web'; if (vers.length >= 1) { version = vers[0]; } if (version) { tags.push(os + version + browser); } } var nxls_err = nx_localstorage.get_error() ; var queries = []; if (nxls_err) { queries.push("lserr=" + encodeURIComponent(nxls_err)); } if (perf) { queries.push(perf); } var rsctiming = getResourceTiming(); if (rsctiming){ queries.push(rsctiming); } queries.push("al=" + (typeof(nx_cr_area_info) == "undefined" ? "" : nx_cr_area_info.length), "tags=" + tags.join(":") ); var u = new Image() ; u.src = "https://er.search.naver.com/er?v=2&" + queries.join("&"); u.onload = function() { u.onload = null ; } }, 250); }, add_tag: function(tag) { tags.push(tag); } }; return usain_obj; }(jQuery); </script>
+         </div>
+         <div class="sch_tab _sch_tab" id="_sch_tab">
+            <div class="sch_tab_inner">
+               <div class="api_list_scroll_wrap" data-log-innerscroll="a=tab.ftk">
+                  <div>
+                     <ul class="api_list_scroll lst_sch" role="tablist">
+                        <li class="bx" role="presentation"><a class=" selected" aria-selected="true" role="tab" href="?where=m&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.now&amp;r=1&amp;i=&amp;u='+urlencode(this.href));"><span class="m">통합<span class="etc">검색</span></span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_blog&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.blg&amp;r=1&amp;i=&amp;u='+urlencode(this.href));"><span class="m">블로그</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_article&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.caf&amp;r=2&amp;i=&amp;u='+urlencode(this.href));"><span class="m">카페</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_kin&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.kin&amp;r=3&amp;i=&amp;u='+urlencode(this.href));"><span class="m">지식iN</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_image&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.img&amp;r=4&amp;i=&amp;u='+urlencode(this.href));"><span class="m">이미지</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_video&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.vdo&amp;r=5&amp;i=&amp;u='+urlencode(this.href));"><span class="m">동영상</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_ldic&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.ldc&amp;r=6&amp;i=&amp;u='+urlencode(this.href));"><span class="m">어학사전</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_news&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.nws&amp;r=7&amp;i=&amp;u='+urlencode(this.href));"><span class="m">뉴스</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_realtime&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.rea&amp;r=8&amp;i=&amp;u='+urlencode(this.href));"><span class="m">실시간</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_web&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.web&amp;r=9&amp;i=&amp;u='+urlencode(this.href));"><span class="m">웹사이트</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_kdic&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.kdc&amp;r=10&amp;i=&amp;u='+urlencode(this.href));"><span class="m">지식백과</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="https://msearch.shopping.naver.com/search/all.nhn?query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.shp&amp;r=11&amp;i=&amp;u='+urlencode(this.href));"><span class="m">쇼핑</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="http://m.map.naver.com/search.nhn?query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.loc&amp;r=12&amp;i=&amp;u='+urlencode(this.href));"><span class="m">지도</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="http://m.music.naver.com/search/search.nhn?query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.mus&amp;r=13&amp;i=&amp;u='+urlencode(this.href));"><span class="m">뮤직</span></a></li>
+                        <li class="bx" role="presentation"><a class="" role="tab" href="?where=m_book&amp;sm=mtb_jum&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this,'a=tab.bok&amp;r=14&amp;i=&amp;u='+urlencode(this.href));"><span class="m">책</span></a></li>
+                     </ul>
+                  </div>
+               </div>
+               <a href="#" class="btn_tab_more" role="button" onclick="$Element('_sch_tab').addClass('open'); return tCR('a=tab.more')"><i class="spnew ico_tab_more">탭검색 펼치기</i></a>
+            </div>
+            <div class="tab_option"> <a href="#" class="option_area _option_on_off" role="button" >검색옵션</a> <button type="button" class="bt_tabsch" onclick="$Element('_sch_tab').removeClass('open'); return tCR('a=tab.less')"><span class="blind">탭검색</span>닫기</button> </div>
+         </div>
+         <script> function nx_clickTabMore (m) { var oTab1 = $Element("nx_tab_menu1") ; var oTab2 = $Element("nx_tab_menu2") ; if (oTab1.visible()) oTab1.hide() ; else oTab1.show() ; var oTabOpen = $Element("nx_tab_open") ; var oTabClose = $Element("nx_tab_close") ; if (oTabOpen.visible()) { oTabOpen.hide() ; oTabClose.show() ; oTab2.addClass("opn") ; tCR('a=tab.more') ; } else { oTabOpen.show() ; oTabClose.hide() ; oTab2.removeClass("opn") ; tCR('a=tmr.less') ; } } </script><script>g_crt+="";</script>
+         <script> var nx_location_country = "KR" ; var nx_location_region = "" ; var nx_location_city = "" ; var nx_location_hcode = "4111755000" ; var nx_location_rcode = "02117102" ; var nx_location_r1 = "경기도" ; var nx_location_r2 = "수원시 영통구" ; var nx_location_r3 = "원천동" ; var nx_location_ntype = "" ; </script><script type="text/javascript">var nx_cr_area_info=[{ n:"nco_x7t",r:1 },{ n:"vdo_bas",r:2 },{ n:"fsn_lis",r:3 },{ n:"img_bas",r:4 },{ n:"loc_plc",r:5 },{ n:"nws_mre",r:6 }];</script>
+         <link rel="stylesheet" type="text/css" href="https://ssl.pstatic.net/sstatic/keypage/outside/scui/air_environment/css/mcs_air_environment_new_170801.css">
+         <link rel="stylesheet" type="text/css" href="https://ssl.pstatic.net/sstatic/au/m/atmospheric_environment/c3_160822.css">
+         <style> .sp_nvideo .sp_video_wrap .info_area .channel{color:inherit;} .sp_nvideo .sp_video_wrap .info_area a.channel{color:#0068c3;} </style>
+         <link rel="stylesheet" type="text/css" href="https://ssl.pstatic.net/sstatic/search/mobile/css/2017/sp_nfeedback_1116.css"/>
+      </header>
+      <hr>
+      <div id="container" >
+         <div id="ct">
+            <div id="snb">
+               <div class="api_group_option group_option_total open _options" style="display:none">
+                  <h3 class="blind">검색옵션</h3>
+                  <button type="button" class="bt_option_more _hide_btn"><i class="spnew ico_close">닫기</i></button>
+                  <ul class="lst_option">
+                     <li class="bx term">
+                        <strong class="tit_wrap">기간<a onclick="return goOtherCR(this, 'a=opt.help&amp;r=&amp;i=&amp;u='+urlencode(this.href));" href="https://m.help.naver.com/support/alias/search/integration_m/integration_m12.naver" class="link_help"><i class="spnew api_ico_help">도움말</i></a></strong>
+                        <div role="tablist" class="option"> <a onclick="return goOtherCR(this, 'a=opt.all&amp;r=&amp;i=&amp;u='+urlencode(this.href));" href="?where=m&amp;sm=mtb_opt&amp;nso=p%3Aall&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" class="txt selected" aria-selected="true">전체</a> <a onclick="return goOtherCR(this, 'a=opt.1h&amp;r=&amp;i=&amp;u='+urlencode(this.href));" href="?where=m&amp;sm=mtb_opt&amp;nso=p%3A1h&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" class="txt ">1시간</a> <a onclick="return goOtherCR(this, 'a=opt.day&amp;r=&amp;i=&amp;u='+urlencode(this.href));" href="?where=m&amp;sm=mtb_opt&amp;nso=p%3A1d&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" class="txt ">1일</a> <a onclick="return goOtherCR(this, 'a=opt.week&amp;r=&amp;i=&amp;u='+urlencode(this.href));" href="?where=m&amp;sm=mtb_opt&amp;nso=p%3A1w&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" class="txt ">1주</a> <a onclick="return goOtherCR(this, 'a=opt.1mon&amp;r=&amp;i=&amp;u='+urlencode(this.href));" href="?where=m&amp;sm=mtb_opt&amp;nso=p%3A1m&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" class="txt ">1개월</a> <a onclick="return goOtherCR(this, 'a=opt.3mon&amp;r=&amp;i=&amp;u='+urlencode(this.href));" href="?where=m&amp;sm=mtb_opt&amp;nso=p%3A3m&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" class="txt ">3개월</a> <a onclick="return goOtherCR(this, 'a=opt.6mon&amp;r=&amp;i=&amp;u='+urlencode(this.href));" href="?where=m&amp;sm=mtb_opt&amp;nso=p%3A6m&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" class="txt ">6개월</a> <a onclick="return goOtherCR(this, 'a=opt.year&amp;r=&amp;i=&amp;u='+urlencode(this.href));" href="?where=m&amp;sm=mtb_opt&amp;nso=p%3A1y&amp;query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" class="txt ">1년</a> <a onclick="tCR('a=opt.calender');return false;" href="#" class="txt txt_option closed _calendar_csb_trigger">직접입력<i class="spnew ico_check">옵션<em class="open">펼치기</em><em class="close">접기</em></i></a> </div>
+                        <div class="api_select_option type_calendar _calendar_select_layer" style="display: none;">
+                           <input type='hidden' class='_trigger'/>
+                           <div role="tablist" class="set_calendar"> <span class="set"> <span class="blind">기간 설정시작</span> <a onclick="tCR('a=opt.calenderstart');return false;" href="#" role="tab" class="spnew_bf ico_calendar _start_trigger selected" aria-selected="true"></a> </span> <span class="set etc"> <span class="spnew ico_since"></span> </span> <span class="set"> <span class="blind">기간 설정끝</span> <a onclick="tCR('a=opt.calenderfinish');return false;" href="#" role="tab" class="spnew_bf ico_calendar _end_trigger"></a> </span> </div>
+                           <div class="select_wrap _wholeList">
+                              <div class="group_select _eachList">
+                                 <strong class="blind">년(Year)</strong>
+                                 <div class="select_cont">
+                                    <div class="select_area _scrollWrapper">
+                                       <div>
+                                          <ul role="tablist" class="lst_item _ul"></ul>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="group_select _eachList">
+                                 <strong class="blind">월(Month)</strong>
+                                 <div class="select_cont">
+                                    <div class="select_area _scrollWrapper">
+                                       <div>
+                                          <ul role="tablist" class="lst_item _ul"></ul>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="group_select _eachList">
+                                 <strong class="blind">일(Day)</strong>
+                                 <div class="select_cont">
+                                    <div class="select_area _scrollWrapper">
+                                       <div>
+                                          <ul role="tablist" class="lst_item _ul"></ul>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="btn_area"><button type="button" class="btn_apply _apply_btn">적용</button></div>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <script> nhn.common.load_js(null, function() { new nhn.mobile.search.searchOption.M({ elBase : $$.getSingle('._options'), elONOFF : $$.getSingle('._option_on_off') }).attach({ selectCalendar : function(e){ date_from = e.sStartDate.replace(/\./g, '') ; date_to = e.sEndDate.replace(/\./g, '') ; gCR("?where=m&sm=mtb_opt&nso=p%3Afrom" + (date_from < date_to ? date_from : date_to) + "to" + (date_from < date_to ? date_to : date_from) + "&query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80", "opt.calenderapply") ; }, clickHideBtn : function(e){ tCR('a=opt.fold') ; $Cookie().remove('nso_open') ; }, toggleONOFF : function(e){ $Element('_sch_tab').removeClass('open') ; window.scrollTo(0,0) ; if (e.isOn) { tCR('a=tab.optn') ; $Cookie().set('nso_open', 1) ; } else { tCR('a=tab.optf') ; $Cookie().remove('nso_open') ; } } }) ; }, true, 150) ; </script>
+            <div class="_scrollLog" style="visibility:hidden;height:0px;"></div>
+            <script type="text/javascript">var nco_area_2860536 = "nco_x7t*3";var nco_gdid_2860536 = "88157038_000000000000";var nco_area_p227 = "nco_x7t*3";var nco_gdid_p227 = "88157038_000000000000";var dss_highlighting_action_type_227 = [];</script>
+            <section class="sc cs_air_environment _cs_air_environment" data-dss-logarea="x7t">
+               <div class="api_subject_bx">
+                  <div class="air_title_area">
+                     <div class="air_tlt ">
+                        <h3 class="u_hc">경기도 수원시 영통구 원천동 대기오염</h3>
+                        <span class="bt_slt"> <select id="weather_region_select" onchange="weather_change_dup_region(this);"> </select> <span class="select_text">경기도 수원시 영통구 원천동</span> </span>
+                     </div>
+                     <div class="air_tlt_sub"> <a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.loc&r=1&i=88157038_000000000000');return false;" href="#" class="sub_link _btn_gps"> <i class="ico_gps"></i> <span class="txt"><strong class="tit">내위치</strong></span> </a> </div>
+                  </div>
+                  <div class="tab_section _nav_bx">
+                     <div class="main_tab">
+                        <div class="tab_fixed">
+                           <div>
+                              <ul>
+                                 <li class="_li " data-name="최근" role="tab" ><a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.pst&r=1&i=88157038_000000000000');return false;" href="#"><span class="menu">최근</span></a></li>
+                                 <li class="_li on" aria-selected="true" data-name="오늘" role="tab" > <a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.tod&r=1&i=88157038_000000000000');return false;" href="#"><span class="menu">오늘</span></a> </li>
+                                 <li class="_li " data-name="내일" role="tab"> <a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.tom&r=1&i=88157038_000000000000');return false;" href="#"><span class="menu">내일</span></a></li>
+                                 <li class="_li " data-name="모레" role="tab"> <a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.tat&r=1&i=88157038_000000000000');return false;" href="#"><span class="menu">모레</span></a></li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="air_box">
+                     <div class="air_info _flick_root">
+                        <div class="flick-ct card eg-flick-panel _panel" style="display:none">
+                           <div class="air_recent">
+                              <div class="rcnt_line">
+                                 <strong>최근 1개월간</strong>
+                                 <div class="_chart" style="height:140px"></div>
+                                 <ul class="note_box">
+                                    <li class="dust"><span>미세먼지</span></li>
+                                    <li class="ultra_dust"><span>초미세먼지</span></li>
+                                    <li class="ozone"><span>오존</span></li>
+                                 </ul>
+                              </div>
+                           </div>
+                           <div class="air_bad_days">
+                              <strong>'나쁨, 매우나쁨' 일 수</strong>
+                              <div class="ratio">
+                                 <strong>미세먼지</strong>
+                                 <div class="bar" style="width:20%"> <span class="inner_bar sign5"><em><span class="u_hc">나쁨 6일</span></em></span> </div>
+                                 <div class="bar" style="width:0%"> <span class="inner_bar sign6"><em><span class="u_hc">매우나쁨 0일</span></em></span> <span class="total_day "> 6일</span> </div>
+                                 <span class="bar_info">1개월간</span>
+                              </div>
+                              <div class="ratio">
+                                 <strong>초미세먼지</strong>
+                                 <div class="bar" style="width:23.3333333333%"> <span class="inner_bar sign5"><em><span class="u_hc">나쁨 7일</span></em></span> </div>
+                                 <div class="bar" style="width:3.3333333333%"> <span class="inner_bar sign6"><em><span class="u_hc">매우나쁨 1일</span></em></span> <span class="total_day "> 8일</span> </div>
+                                 <span class="bar_info">1개월간</span>
+                              </div>
+                              <div class="ratio">
+                                 <strong>오존</strong>
+                                 <div class="bar" style="width:0%"> <span class="inner_bar sign5"><em><span class="u_hc">나쁨 0일</span></em></span> </div>
+                                 <div class="bar" style="width:0%"> <span class="inner_bar sign6"><em><span class="u_hc">매우나쁨 0일</span></em></span> <span class="total_day no"> 0일</span> </div>
+                                 <span class="bar_info">1개월간</span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="flick-ct card eg-flick-panel _panel" >
+                           <div class="air_today">
+                              <div class="air_condition sign2">
+                                 <strong class="u_hc">미세먼지</strong>
+                                 <ul class="condition_text">
+                                    <li> <span>41<em>㎍/㎥</em></span> </li>
+                                 </ul>
+                                 <p class="state"> <span class="town_name">원천동</span> 미세먼지는<br> <em>보통</em>입니다. </p>
+                                 <p class="aqi_view"><a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.aqiview&r=1&i=88157038_000000000000');return false;" href="#" class="_view_to_aqi">해외기준으로 보기</a></p>
+                                 <div class="air_figure2">
+                                    <div class="alert" style="left:57.14285714285%">
+                                       <p><span class="blind">100이상시 경계</span>경계 100~</p>
+                                    </div>
+                                    <div class="ballon_area"> <span class="ballon" style="left:30.5%">41</span> </div>
+                                    <ul>
+                                       <li class="sign1"> <em><span class="condition">좋음<span>~30</span></span></em> </li>
+                                       <li class="sign2"> <em><span class="condition">보통<span>~80</span></span></em> </li>
+                                       <li class="sign5"> <em><span class="condition">나쁨<span>~150</span></span></em> </li>
+                                       <li class="sign6"> <em><span class="condition">매우나쁨<span>151~</span></span></em> </li>
+                                    </ul>
+                                 </div>
+                                 <div class="air_weather_info">
+                                    <a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.wth&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="?where=m&sm=mtb_etc&query=%EC%88%98%EC%9B%90%EC%8B%9C%20%EC%98%81%ED%86%B5%EA%B5%AC%20%EC%9B%90%EC%B2%9C%EB%8F%99%20%EB%82%A0%EC%94%A8" class="wt_link">
+                                       <span class="u_hc">날씨보기</span>
+                                       <div class="wt_detail"> <span class="ico_status2 ws7">흐림</span> <span class="temperature">20<span class="celsius"><span class="u_hc">도씨</span></span></span> </div>
+                                    </a>
+                                 </div>
+                              </div>
+                              <div class="air_chart">
+                                 <ul>
+                                    <li> <strong>초미세먼지</strong> <span class="sign2"> <span class="sign2"> 보통<em>19㎍/㎥</em> </span> </span> <a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.mdu&r=1&i=88157038_000000000000');return false;" href="#" class="btn_info _vt_trigger0">기준</a> </li>
+                                    <li> <strong>오존</strong> <span class="sign1"> <span class="sign1"> 좋음<em>0.022ppm</em> </span> </span> <a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.ozn&r=1&i=88157038_000000000000');return false;" href="#" class="btn_info _vt_trigger1">기준</a> </li>
+                                    <li> <strong>일산화탄소</strong> <span class="sign1"> <span class="sign1"> 좋음<em>0.4ppm</em> </span> </span> <a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.cox&r=1&i=88157038_000000000000');return false;" href="#" class="btn_info _vt_trigger2">기준</a> </li>
+                                    <li> <strong>아황산가스</strong> <span class="sign1"> <span class="sign1"> 좋음<em>0.002ppm</em> </span> </span> <a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.nno&r=1&i=88157038_000000000000');return false;" href="#" class="btn_info _vt_trigger3">기준</a> </li>
+                                    <li> <strong>이산화질소</strong> <span class="sign1"> <span class="sign1"> 좋음<em>0.028ppm</em> </span> </span> <a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.coo&r=1&i=88157038_000000000000');return false;" href="#" class="btn_info _vt_trigger4">기준</a> </li>
+                                    <li> <strong>통합대기</strong> <span class="sign2"> <span class="sign2"> 보통<em>61</em> </span> </span> <a nocr onclick="goOtherTCR(this, 'a=nco_x7t*3.cai&r=1&i=88157038_000000000000');return false;" href="#" class="btn_info _vt_trigger9">기준</a> </li>
+                                 </ul>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="flick-ct card eg-flick-panel _panel" style="display:none">
+                           <div class="air_nextday" data-height="221">
+                              <table cellspacing="0" class="air_table">
+                                 <caption> 내일의 대기 정보 </caption>
+                                 <colgroup>
+                                    <col width="33%">
+                                    <col width="33%">
+                                    <col width="34%">
+                                 </colgroup>
+                                 <thead>
+                                    <tr>
+                                       <th scope="col" class="division">구분</th>
+                                       <th scope="col">내일오전<span class="day">05월31일</span></th>
+                                       <th scope="col">내일오후<span class="day">05월31일</span></th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <tr>
+                                       <th scope="row">미세먼지</th>
+                                       <td class="sign2">보통</td>
+                                       <td class="sign2">보통</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">초미세먼지</th>
+                                       <td class="sign2">보통</td>
+                                       <td class="sign2">보통</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">오존</th>
+                                       <td class="sign2">보통</td>
+                                       <td class="sign2">보통</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">자외선</th>
+                                       <td class="sign2">보통</td>
+                                       <td class="sign5">나쁨</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">황사</th>
+                                       <td class="sign1">약함</td>
+                                       <td class="sign1">약함</td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                        <div class="flick-ct card eg-flick-panel _panel" style="display:none">
+                           <div class="air_nextday" data-height="221">
+                              <table cellspacing="0" class="air_table">
+                                 <caption> 모레의 대기 정보 </caption>
+                                 <colgroup>
+                                    <col width="33%">
+                                    <col width="33%">
+                                    <col width="34%">
+                                 </colgroup>
+                                 <thead>
+                                    <tr>
+                                       <th scope="col" class="division">구분</th>
+                                       <th scope="col">모레오전<span class="day">06월01일</span></th>
+                                       <th scope="col">모레오후<span class="day">06월01일</span></th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <tr>
+                                       <th scope="row">미세먼지</th>
+                                       <td class="sign2">보통</td>
+                                       <td class="sign2">보통</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">초미세먼지</th>
+                                       <td class="sign2">보통</td>
+                                       <td class="sign2">보통</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">오존</th>
+                                       <td class="sign2">보통</td>
+                                       <td class="sign5">나쁨</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">자외선</th>
+                                       <td class="sign2">보통</td>
+                                       <td class="sign5">나쁨</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">황사</th>
+                                       <td class="sign1">약함</td>
+                                       <td class="sign1">약함</td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="station_box">
+                        <div class="title_area">
+                           <h3 class="section_title">인접 측정소</h3>
+                        </div>
+                        <div class="station_detail">
+                           <div class="station_info">
+                              <table>
+                                 <caption>인접측정소 정보</caption>
+                                 <colgroup>
+                                    <col class="tb1">
+                                    <col class="tb2">
+                                    <col class="tb3">
+                                 </colgroup>
+                                 <thead>
+                                    <tr>
+                                       <th>측정소</th>
+                                       <th>미세먼지</th>
+                                       <th>초미세먼지</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <tr>
+                                       <td class="two_lines"> <a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.closest&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="?where=m&sm=mtb_etc&query=%EA%B2%BD%EC%88%98%EB%8C%80%EB%A1%9C%EC%B8%A1%EC%A0%95%EC%86%8C">경수대로</a><span class="target">도로변대기</span><span class="district">경기 수원시 팔달구 우만동562-7</span> </td>
+                                       <td> <span class="figure sign2">69<em>㎍/m³</em></span> </td>
+                                       <td> <span class="figure sign2">19<em>㎍/m³</em></span> </td>
+                                    </tr>
+                                    <tr>
+                                       <td class="two_lines"> <a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.closest&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="?where=m&sm=mtb_etc&query=%EC%9D%B8%EA%B3%84%EB%8F%99%EC%B8%A1%EC%A0%95%EC%86%8C">인계동</a><span class="target">도시대기</span><span class="district">경기 수원시 팔달구 인계동 1111(수원시청)수원시청</span> </td>
+                                       <td> <span class="figure sign2">41<em>㎍/m³</em></span> </td>
+                                       <td> <span class="figure sign2">19<em>㎍/m³</em></span> </td>
+                                    </tr>
+                                    <tr>
+                                       <td class="two_lines"> <a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.closest&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="?where=m&sm=mtb_etc&query=%EA%B4%91%EA%B5%90%EB%8F%99%EC%B8%A1%EC%A0%95%EC%86%8C">광교동</a><span class="target">도시대기</span><span class="district">경기 수원시 영통구 법조로 129(하동 981, 이의중학교 옥상)이의중학교</span> </td>
+                                       <td> <span class="figure sign2">50<em>㎍/m³</em></span> </td>
+                                       <td> <span class="figure sign2">26<em>㎍/m³</em></span> </td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="pop_aqi _pop_aqi" style="display:none">
+                        <div class="pop_box _pop_box">
+                           <strong class="title">해외기준으로 보기<span class="sub_title">AQI 대기지수</span></strong>
+                           <div class="air_today">
+                              <div class="air_condition aqi_sign1">
+                                 <strong class="u_hc">미세먼지</strong>
+                                 <ul class="condition_text">
+                                    <li> <span>38</span> </li>
+                                    <li> <span class="sub_info">Good 좋음</span> </li>
+                                 </ul>
+                                 <ul class="legend">
+                                    <li><span class="ico_square aqi_sign1"><em>0~50</em></span><span class="explain">Good, 좋음</span> </li>
+                                    <li><span class="ico_square aqi_sign2">51~100</span><span class="explain">Moderate, 보통</span> </li>
+                                    <li><span class="ico_square aqi_sign3">101~150</span><span class="explain">Unhealthy for the sensitive, <br>민감군에 나쁨</span> </li>
+                                    <li><span class="ico_square aqi_sign4">151~200</span><span class="explain">Unhealthy, 나쁨</span> </li>
+                                    <li><span class="ico_square aqi_sign5">201~300</span><span class="explain">Very Unhealthy, 매우나쁨</span> </li>
+                                    <li><span class="ico_square aqi_sign6">301~500</span><span class="explain">Hazardous, 위험</span> </li>
+                                 </ul>
+                                 <p class="notice">AQI (Air Quality Index)는 대기오염 수치를 지수로 환산한 것이며, 국가별 기준에 따라 다른 값을 가질 수 있습니다. 제공된 결과값과 구간별 색상은 국제적으로 많이 사용하는 미국환경보호국(EPA-U.S. AQI) 기준입니다.<br><a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.aiqstmr&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="http://naver.me/FMVf1OwD">자세히보기</a>,<a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.aiqstmr&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="https://airnow.gov/index.cfm?action=aqibasics.aqi"> 해외기준보기</a> </p>
+                              </div>
+                           </div>
+                           <a onclick='return goOtherCR(this,&quot;a=nco_x7t*3&r=1&i=&quot;+urlencode(&quot;88157038_000000000000&quot;)+&quot;&u=&quot;+urlencode(this.href));' href="#" class="layer_close _close_aqi">레이어 닫기</a>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="air_notice _air_notice" data-name="최근" style="display: none;">
+                     <div class="provide_info _provide_info">
+                        <p class="provide"> 최근 데이터는 매일 오후 11시 기록된 대기오염 측정 등급을 기준으로 1개월 추이를 제공합니다. <span>제공 <a onclick='return goOtherCR(this,&quot;a=nco_x7t*3&r=1&i=&quot;+urlencode(&quot;88157038_000000000000&quot;)+&quot;&u=&quot;+urlencode(this.href));' href="http://m.airkorea.or.kr/" class="tit">에어코리아</a></span> </p>
+                     </div>
+                  </div>
+                  <div class="air_notice _air_notice" style="display: block;" data-name="오늘">
+                     <div class="provide_info _provide_info">
+                        <p class="provide">데이터는 측정소 사정이나 데이터 수신상태에 따라 업데이트가 지연되거나 차이가 발생할 수 있습니다. <span class="update">최종업데이트 <em>2018.05.30. 11:00</em> 기준</span> <span class="offer">제공 <a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.source&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="http://m.airkorea.or.kr/" class="tit">에어코리아</a> </span></p>
+                     </div>
+                  </div>
+                  <div class="air_notice _air_notice _top" style="display: none;" data-name="내일">
+                     <div class="provide_info _provide_info">
+                        <p class="provide">케이웨더가 대기환경 예보모델(CMAQ)을 적용해 예측한 값이며,'한때나쁨'은 나쁨(81-150㎍/m&#179;)상태가 6시간 미만인 상태를 의미합니다. 최종업데이트 <em>2018.05.30. 11:00</em> 경기도 기준(예보) , <em>2018.05.30. 11:00</em> 인계동 기준(인접측정소). <span class="offer">제공 <a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.source&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="http://m.kweather.co.kr/" class="tit">케이웨더</a>(예보), <a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.source&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="http://m.airkorea.or.kr/" class="tit">에어코리아</a>(인접측정소) </span></p>
+                     </div>
+                  </div>
+                  <div class="air_notice _air_notice _top" style="display: none;" data-name="모레">
+                     <div class="provide_info _provide_info">
+                        <p class="provide">케이웨더가 대기환경 예보모델(CMAQ)을 적용해 예측한 값이며,'한때나쁨'은 나쁨(81-150㎍/m&#179;)상태가 6시간 미만인 상태를 의미합니다. 최종업데이트 <em>2018.05.30. 11:00</em> 경기도 기준(예보) , <em>2018.05.30. 11:00</em> 인계동 기준(인접측정소). <span class="offer">제공 <a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.source&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="http://m.kweather.co.kr/" class="tit">케이웨더</a>(예보), <a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.source&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="http://m.airkorea.or.kr/" class="tit">에어코리아</a>(인접측정소) </span></p>
+                     </div>
+                  </div>
+                  <div class="cnt_more">
+                     <span class="txt">관련</span>
+                     <ul>
+                        <li><a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.wmr&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="?where=m&sm=mtb_etc&query=%EC%A0%84%EA%B5%AD%20%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80">전국 미세먼지</a>,</li>
+                        <li><a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.wmr&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="?where=m&sm=mtb_etc&query=%EC%98%A4%EB%8A%98%EB%82%A0%EC%94%A8">오늘날씨</a>,</li>
+                        <li><a nocr onclick="return goOtherCR(this, 'a=nco_x7t*3.wmr&r=1&i=88157038_000000000000&u=' + urlencode(this.href));" href="?where=m&sm=mtb_etc&query=%EB%82%B4%EC%9D%BC%EB%82%A0%EC%94%A8">내일날씨</a></li>
+                     </ul>
+                  </div>
+                  <div class="pop_box _vt_content0" style="display:none">
+                     <div class="air_detail">
+                        <div class="pop_info">
+                           <strong class="tit">초미세먼지</strong>
+                           <p class="text"> 초미세먼지는 1000분의 2.5mm미만 미세입자 먼지로, 코 점막을 통해 걸러지지 않고 호흡기,폐에 침투할 수 있어 각별한 주의가 필요합니다. </p>
+                           <div class="air_figure">
+                              <ul>
+                                 <li class="sign1">
+                                    <em class="pt0">0</em> <em>~15</em>
+                                    <p><span>좋음</span></p>
+                                 </li>
+                                 <li class="sign2">
+                                    <em>~35</em>
+                                    <p><span>보통</span></p>
+                                 </li>
+                                 <li class="sign5">
+                                    <em>~75</em>
+                                    <p><span>나쁨</span></p>
+                                 </li>
+                                 <li class="sign6">
+                                    <em>76~</em>
+                                    <p><span>매우나쁨</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                           <div class="air_standard">
+                              <strong>국제 초미세먼지 '경계단계' 기준<span>(24시간 평균)</span></strong>
+                              <ul>
+                                 <li><span class="country">한국</span><span class="figure">35<em>㎍/㎥</em></span></li>
+                                 <li><span class="country">일본</span><span class="figure">35<em>㎍/㎥</em></span></li>
+                                 <li><span class="country">WHO</span><span class="figure">25<em>㎍/㎥</em></span></li>
+                                 <li><span class="country">미국</span><span class="figure">35<em>㎍/㎥</em></span></li>
+                                 <li><span class="country">EU</span><span class="figure">-<em>㎍/㎥</em></span></li>
+                                 <li><span class="country">중국</span><span class="figure">75<em>㎍/㎥</em></span></li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                     <a onclick='return goOtherCR(this,&quot;a=nco_x7t*3&r=1&i=&quot;+urlencode(&quot;88157038_000000000000&quot;)+&quot;&u=&quot;+urlencode(this.href));' href="#" class="layer_close _vt_toggle_off0">레이어 닫기</a>
+                  </div>
+                  <div class="pop_box _vt_content1" style="display:none">
+                     <div class="air_detail">
+                        <div class="pop_info">
+                           <strong class="tit">오존</strong>
+                           <p class="text"> 오존은 대기 중 배출된 Nox와 휘발성유기화합물이 자외선과 광화학반응해 생성된 2차 오염물질입니다. 다량 반복 노출 시 기관지와 호흡기, 폐에 부정적 영향을 줄 수 있습니다. </p>
+                           <div class="air_figure">
+                              <ul>
+                                 <li class="sign1">
+                                    <em class="pt0">0</em> <em>~0.03</em>
+                                    <p><span>좋음</span></p>
+                                 </li>
+                                 <li class="sign2">
+                                    <em>~0.09</em>
+                                    <p><span>보통</span></p>
+                                 </li>
+                                 <li class="sign5">
+                                    <em>~0.15</em>
+                                    <p><span>나쁨</span></p>
+                                 </li>
+                                 <li class="sign6">
+                                    <em>0.151~</em>
+                                    <p><span>매우나쁨</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                     <a onclick='return goOtherCR(this,&quot;a=nco_x7t*3&r=1&i=&quot;+urlencode(&quot;88157038_000000000000&quot;)+&quot;&u=&quot;+urlencode(this.href));' href="#" class="layer_close _vt_toggle_off1">레이어 닫기</a>
+                  </div>
+                  <div class="pop_box _vt_content2" style="display:none">
+                     <div class="air_detail">
+                        <div class="pop_info">
+                           <strong class="tit">일산화탄소</strong>
+                           <p class="text"> 일산화탄소는 탄소성분이 불완전 연소 시 발생하는 유독성 가스로, 산업공정의 연소, 주방 및 담배연기 등에서 발생가능합니다. 신체 내 산소운반 기능을 저하시켜 치명적일 수 있습니다. </p>
+                           <div class="air_figure">
+                              <ul>
+                                 <li class="sign1">
+                                    <em class="pt0">0</em> <em>~2</em>
+                                    <p><span>좋음</span></p>
+                                 </li>
+                                 <li class="sign2">
+                                    <em>~9</em>
+                                    <p><span>보통</span></p>
+                                 </li>
+                                 <li class="sign5">
+                                    <em>~15</em>
+                                    <p><span>나쁨</span></p>
+                                 </li>
+                                 <li class="sign6">
+                                    <em>15.01~</em>
+                                    <p><span>매우나쁨</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                     <a onclick='return goOtherCR(this,&quot;a=nco_x7t*3&r=1&i=&quot;+urlencode(&quot;88157038_000000000000&quot;)+&quot;&u=&quot;+urlencode(this.href));' href="#" class="layer_close _vt_toggle_off2">레이어 닫기</a>
+                  </div>
+                  <div class="pop_box _vt_content3" style="display:none">
+                     <div class="air_detail">
+                        <div class="pop_info">
+                           <strong class="tit">아황산가스</strong>
+                           <p class="text"> 아황산가스는 황을 함유한 화석연료의 연소 시 배출되는 대기오염 물질로, 고농도 흡입 시 노약자와 호흡기 환자에게 부정적 영향을 줄 수 있습니다. </p>
+                           <div class="air_figure">
+                              <ul>
+                                 <li class="sign1">
+                                    <em class="pt0">0</em> <em>~0.02</em>
+                                    <p><span>좋음</span></p>
+                                 </li>
+                                 <li class="sign2">
+                                    <em>~0.05</em>
+                                    <p><span>보통</span></p>
+                                 </li>
+                                 <li class="sign5">
+                                    <em>~0.15</em>
+                                    <p><span>나쁨</span></p>
+                                 </li>
+                                 <li class="sign6">
+                                    <em>0.151~</em>
+                                    <p><span>매우나쁨</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                     <a onclick='return goOtherCR(this,&quot;a=nco_x7t*3&r=1&i=&quot;+urlencode(&quot;88157038_000000000000&quot;)+&quot;&u=&quot;+urlencode(this.href));' href="#" class="layer_close _vt_toggle_off3">레이어 닫기</a>
+                  </div>
+                  <div class="pop_box _vt_content4" style="display:none">
+                     <div class="air_detail">
+                        <div class="pop_info">
+                           <strong class="tit">이산화질소</strong>
+                           <p class="text"> 이산화질소는 공업 연소 및 화학물질 공정 등에서 발생하는 질소화합물성 대기오염 물질로, 고농도 노출 시 점막과 기관지 폐에 부정적 영향을 줄 수 있습니다. </p>
+                           <div class="air_figure">
+                              <ul>
+                                 <li class="sign1">
+                                    <em class="pt0">0</em> <em>~0.03</em>
+                                    <p><span>좋음</span></p>
+                                 </li>
+                                 <li class="sign2">
+                                    <em>~0.06</em>
+                                    <p><span>보통</span></p>
+                                 </li>
+                                 <li class="sign5">
+                                    <em>~0.2</em>
+                                    <p><span>나쁨</span></p>
+                                 </li>
+                                 <li class="sign6">
+                                    <em>0.201~</em>
+                                    <p><span>매우나쁨</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                     <a onclick='return goOtherCR(this,&quot;a=nco_x7t*3&r=1&i=&quot;+urlencode(&quot;88157038_000000000000&quot;)+&quot;&u=&quot;+urlencode(this.href));' href="#" class="layer_close _vt_toggle_off4">레이어 닫기</a>
+                  </div>
+                  <div class="pop_box _vt_content9" style="display:none">
+                     <div class="air_detail">
+                        <div class="pop_info">
+                           <strong class="tit">통합대기</strong>
+                           <p class="text"> 통합대기지수는 대기오염도 6개 대기오염 측정치를 바탕으로 대기오염도에 따른 인체 영향 및 체감오염도를 고려하여 개발된 대기오염도 표현방식입니다. </p>
+                           <div class="air_figure">
+                              <ul>
+                                 <li class="sign1">
+                                    <em class="pt0">0</em> <em>~50</em>
+                                    <p><span>좋음</span></p>
+                                 </li>
+                                 <li class="sign2">
+                                    <em>~100</em>
+                                    <p><span>보통</span></p>
+                                 </li>
+                                 <li class="sign5">
+                                    <em>~250</em>
+                                    <p><span>나쁨</span></p>
+                                 </li>
+                                 <li class="sign6">
+                                    <em>251~</em>
+                                    <p><span>매우나쁨</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                     <a onclick='return goOtherCR(this,&quot;a=nco_x7t*3&r=1&i=&quot;+urlencode(&quot;88157038_000000000000&quot;)+&quot;&u=&quot;+urlencode(this.href));' href="#" class="layer_close _vt_toggle_off9">레이어 닫기</a>
+                  </div>
+               </div>
+            </section>
+            <script type="text/javascript"> (function($){ nhn.common.nco_area_name(nco_area_p227); var sJavascriptFile = "https://ssl.pstatic.net/sstatic/au/m/atmospheric_environment/nhn.mobile.search.atmosphericEnvironment.town_180206.js"; var fnCallback = function(){ var columns = [ [ "fine-dust", "2.94", "3.44", "1.266666666667", "2.2", "2.28", "2.22", "1.766666666667", "2.76", "1.566666666667", "2.22", "2.46", "2.84", "1.566666666667", "2.28", "3.757142857143", "3.62", "2.066666666667", "1.466666666667", "1.733333333333", "1.666666666667", "2.32", "2.94", "3.585714285714", "3.2", "3.028571428571", "2.96", "2.4", "2.3" ], [ "ultrafine-particles", "3.125", "3.45", "1.2", "2.3", "2.25", "2.15", "1.933333333333", "3.05", "1.533333333333", "1.8", "3.4", "3", "1.333333333333", "2.7", "4.025", "3.55", "2.266666666667", "1.266666666667", "1.666666666667", "1.6", "2.2", "1.933333333333", "3.35", "2.95", "2.8", "2.7", "2.75", "2.55" ], [ "ozone", "2.15", "1.3", "2.2", "2.233333333333", "2.166666666667", "2.433333333333", "1.466666666667", "1.1", "2.216666666667", "1.566666666667", "2.316666666667", "2.05", "2", "1.533333333333", "1.066666666667", "1.9", "1.5", "1.733333333333", "1.966666666667", "1.966666666667", "2.033333333333", "2.016666666667", "2.55", "1.066666666667", "2.25", "1.4", "2.216666666667", "2" ] ]; var dates = [ "04/30", "05/01", "05/02", "05/03", "05/04", "05/05", "05/06", "05/07", "05/08", "05/09", "05/10", "05/11", "05/12", "05/13", "05/14", "05/15", "05/16", "05/17", "05/18", "05/19", "05/20", "05/21", "05/22", "05/23", "05/24", "05/25", "05/26", "05/27", "05/28", "05/29" ]; new nhn.mobile.search.atmosphericEnvironment.town.Main({ root : $("._cs_air_environment").get(0), persistKey : "_au_cs_air_environment_town_persist", columns : columns, dates : dates, geolocationParam : { mode : "real", serviceName : "air_pollution", useCoordsToAddr : true, setCookie: true }, today : headerfooter_time_month_s + "/" + headerfooter_time_day_s }).on({ flicked : function(e){ }, myLoationSuccess: function(e){ var data = e.data; /* [AU] 아래 console.log() 를 지우고 위치를 얻어온 다음 동작을 수행하세요. */ var latitude = data.latitude ; var longitude = data.longitude ; if ((latitude != "") && (longitude != "")) { var current_coords = latitude + ":" + longitude; if ( data.name != "" && typeof data.name != "undefined" ){ var locatoinName = data.name ; locationName = encodeURIComponent(locatoinName); current_coords = current_coords + "@" + locationName; } var query = encodeURIComponent(data.do + " " + data.si + " " + data.dong + " 미세먼지" ); var link = "?where=m&query="+query+"&sm=mtb_etc" ; if ( data.status && ( typeof ( data.status ) != "undefined" ) && data.status.code == "003" ) { alert(data.status.msg); } else { gCR(link, 'nco_x7t*3.loc', '0'); } } } }); };nhn.common.load_js(sJavascriptFile, fnCallback, false, 150);}(jQuery)); </script>
+            <div class="_scrollLog" style="visibility:hidden;height:0px;"></div>
+            <section class="sc sp_nvideo _au_video_collection">
+               <div class="api_subject_bx">
+                  <div class="api_title_area">
+                     <h2 class="api_title">동영상</h2>
+                  </div>
+                  <div class="sp_video_wrap _list">
+                     <div class="api_list_scroll_wrap" id="_carousel_video" data-log-innerscroll="a=vdo.flk">
+                        <ul class="api_list_scroll list_video">
+                           <li class="bx " data-index="0">
+                              <div class="video_bx">
+                                 <a href="http://m.tv.naver.com/v/2988639" onClick="goOtherCR(this, 'a=vdo_bas*g.thu&r=1&i=881622f8_000002988639&u='+urlencode(this.href))" class="thumb_area" >
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Ftvcast2.phinf.naver.net%2F20180405_78%2F2UJRb_1522915312358P615g_PNG%2F1522915309460.png&type=ac312_180" width="156" height="90" alt="180402 수원시, 미세먼지 저감에 ‘행정력 총동원’" onError="$Element(this).className('bg_nimg2').attr({src:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',alt:'이미지준비중'})"> <i class="spnew api_ico_video">동영상</i>
+                                    <div class="play"><span class="blind">재생시간</span><span aria-label="00:02:37">02:37</span></div>
+                                    <i class="spnew ico_video_play">재생중</i>
+                                 </a>
+                                 <div class="info_area">
+                                    <a href="http://m.tv.naver.com/v/2988639" onClick="goOtherCR(this, 'a=vdo_bas*g.tit&r=1&i=881622f8_000002988639&u='+urlencode(this.href))" class="info_title " > 180402 수원시, <mark>미세먼지</mark> 저감에 ‘행정력 총동원’ </a>
+                                    <div class="info_sub elss">
+                                       <div class="dsc group"> <span class="date">1달 전</span> <a href="http://tv.naver.com/suwonitv" onclick="goOtherCR(this, 'a=vdo_bas*g.cha&r=1&i=881622f8_000002988639&u='+urlencode(this.href))" class="channel elss">수원시 (Suwon City)</a> </div>
+                                       <div class="dsc"><span class="origin">네이버TV</span></div>
+                                    </div>
+                                    <div class="info_sub">
+                                       <div class="dsc"><span class="count"><i class="blind">재생수</i>244</span></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </li>
+                           <li class="bx _item" data-index="1">
+                              <div class="video_bx">
+                                 <a onClick="tCR('a=vdo_bas*d.thu&r=2&i=90000003_000000000000003383BFB513&u=javascript');return false;" class="thumb_area _trigger" data-api="https://s.search.naver.com/p/videosearch/search.naver?ssl=1&where=inkey&vid=90000003_000000000000003383BFB513:8&ie=&ie=utf8&rev=33">
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblogucc28%2F2018%2F04%2F16%2F1293%2F9268ee30338c30086cdc23dd3a856515ecd6_ugcvideo_270P_01_origin_s152.jpg&type=ac312_180" width="156" height="90" alt="# 수원시 영통구 원천동 호산빌리지 세면대 수전..." onError="$Element(this).className('bg_nimg2').attr({src:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',alt:'이미지준비중'})"> <i class="spnew api_ico_video quick">동영상 바로재생</i>
+                                    <div class="play"><span class="blind">재생시간</span><span aria-label="00:00:11">00:11</span></div>
+                                    <i class="spnew ico_video_play">재생중</i>
+                                 </a>
+                                 <div class="info_area">
+                                    <a href="http://m.blog.naver.com/ajh3530/221253711123" onClick="goOtherCR(this, 'a=vdo_bas*d.tit&r=2&i=90000003_000000000000003383BFB513&u='+urlencode(this.href))" class="info_title " > # 수원시 <mark>영통구 원천동</mark> 호산빌리지 세면대 수전... </a>
+                                    <div class="info_sub elss">
+                                       <div class="dsc group"> <span class="date">1달 전</span> <a href="http://blog.naver.com/ajh3530" onclick="goOtherCR(this, 'a=vdo_bas*d.cha&r=2&i=90000003_000000000000003383BFB513&u='+urlencode(this.href))" class="channel elss">유명설비 031-221-7898 , 010-8726-0231</a> </div>
+                                       <div class="dsc"><span class="origin">네이버 블로그</span></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </li>
+                           <li class="bx _item" data-index="2">
+                              <div class="video_bx">
+                                 <a onClick="tCR('a=vdo_bas*d.thu&r=3&i=90000003_00000000000000338073B509&u=javascript');return false;" class="thumb_area _trigger" data-api="https://s.search.naver.com/p/videosearch/search.naver?ssl=1&where=inkey&vid=90000003_00000000000000338073B509:1&ie=&ie=utf8&rev=33">
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblogucc28%2F2018%2F02%2F01%2F1854%2F6d2f98bc81a03d38deb6527153f421ae8318_ugcvideo_270P_01_16x9_s152.jpg&type=ac312_180" width="156" height="90" alt="영통구 원천동신축빌라 말할꺼같으면" onError="$Element(this).className('bg_nimg2').attr({src:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',alt:'이미지준비중'})"> <i class="spnew api_ico_video quick">동영상 바로재생</i>
+                                    <div class="play"><span class="blind">재생시간</span><span aria-label="00:00:44">00:44</span></div>
+                                    <i class="spnew ico_video_play">재생중</i>
+                                 </a>
+                                 <div class="info_area">
+                                    <a href="http://m.blog.naver.com/viki9642/221198398729" onClick="goOtherCR(this, 'a=vdo_bas*d.tit&r=3&i=90000003_00000000000000338073B509&u='+urlencode(this.href))" class="info_title " > <mark>영통구 원천동</mark>신축빌라 말할꺼같으면 </a>
+                                    <div class="info_sub elss">
+                                       <div class="dsc group"> <span class="date">3달 전</span> <a href="http://blog.naver.com/viki9642" onclick="goOtherCR(this, 'a=vdo_bas*d.cha&r=3&i=90000003_00000000000000338073B509&u='+urlencode(this.href))" class="channel elss">BK주택</a> </div>
+                                       <div class="dsc"><span class="origin">네이버 블로그</span></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </li>
+                           <li class="bx _item" data-index="3">
+                              <div class="video_bx">
+                                 <a onClick="tCR('a=vdo_bas*d.thu&r=4&i=90000003_00000000000000338592841A&u=javascript');return false;" class="thumb_area _trigger" data-api="https://s.search.naver.com/p/videosearch/search.naver?ssl=1&where=inkey&vid=90000003_00000000000000338592841A:8&ie=&ie=utf8&rev=33">
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblogucc28%2F2018%2F05%2F25%2F1816%2Ffaa0d300b4b6590cc097d78cf28a38ff679e_ugcvideo_270P_01_16x9_s152.jpg&type=ac312_180" data-lazy-load="1" width="156" height="90" alt="수원시 영통구 동수원... 미세먼지! 황사! 꽃가루!..." onError="$Element(this).className('bg_nimg2').attr({src:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',alt:'이미지준비중'})"> <i class="spnew api_ico_video quick">동영상 바로재생</i>
+                                    <div class="play"><span class="blind">재생시간</span><span aria-label="00:00:17">00:17</span></div>
+                                    <i class="spnew ico_video_play">재생중</i>
+                                 </a>
+                                 <div class="info_area">
+                                    <a href="http://m.blog.naver.com/sungjin0305/221284303898" onClick="goOtherCR(this, 'a=vdo_bas*d.tit&r=4&i=90000003_00000000000000338592841A&u='+urlencode(this.href))" class="info_title " > 수원시 <mark>영통구</mark> 동수원... <mark>미세먼지</mark>! 황사! 꽃가루!... </a>
+                                    <div class="info_sub elss">
+                                       <div class="dsc group"> <span class="date">5일 전</span> <a href="http://blog.naver.com/sungjin0305" onclick="goOtherCR(this, 'a=vdo_bas*d.cha&r=4&i=90000003_00000000000000338592841A&u='+urlencode(this.href))" class="channel elss">천재홈케어</a> </div>
+                                       <div class="dsc"><span class="origin">네이버 블로그</span></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </li>
+                           <li class="bx _item" data-index="4">
+                              <div class="video_bx">
+                                 <a onClick="tCR('a=vdo_bas*d.thu&r=5&i=90000003_00000000000000338592841A&u=javascript');return false;" class="thumb_area _trigger" data-api="https://s.search.naver.com/p/videosearch/search.naver?ssl=1&where=inkey&vid=90000003_00000000000000338592841A:10&ie=&ie=utf8&rev=33">
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblogucc28%2F2018%2F05%2F25%2F150%2F99db8619351099cbf41bbea5c474fde1be51_ugcvideo_270P_01_16x9_s152.jpg&type=ac312_180" data-lazy-load="1" width="156" height="90" alt="수원시 영통구 동수원... 미세먼지! 황사! 꽃가루!..." onError="$Element(this).className('bg_nimg2').attr({src:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',alt:'이미지준비중'})"> <i class="spnew api_ico_video quick">동영상 바로재생</i>
+                                    <div class="play"><span class="blind">재생시간</span><span aria-label="00:00:12">00:12</span></div>
+                                    <i class="spnew ico_video_play">재생중</i>
+                                 </a>
+                                 <div class="info_area">
+                                    <a href="http://m.blog.naver.com/sungjin0305/221284303898" onClick="goOtherCR(this, 'a=vdo_bas*d.tit&r=5&i=90000003_00000000000000338592841A&u='+urlencode(this.href))" class="info_title " > 수원시 <mark>영통구</mark> 동수원... <mark>미세먼지</mark>! 황사! 꽃가루!... </a>
+                                    <div class="info_sub elss">
+                                       <div class="dsc group"> <span class="date">5일 전</span> <a href="http://blog.naver.com/sungjin0305" onclick="goOtherCR(this, 'a=vdo_bas*d.cha&r=5&i=90000003_00000000000000338592841A&u='+urlencode(this.href))" class="channel elss">천재홈케어</a> </div>
+                                       <div class="dsc"><span class="origin">네이버 블로그</span></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </li>
+                           <li class="bx _item" data-index="5">
+                              <div class="video_bx">
+                                 <a onClick="tCR('a=vdo_bas*d.thu&r=6&i=90000003_00000000000000337B703828&u=javascript');return false;" class="thumb_area _trigger" data-api="https://s.search.naver.com/p/videosearch/search.naver?ssl=1&where=inkey&vid=90000003_00000000000000337B703828:12&ie=&ie=utf8&rev=33">
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblogucc28%2F2017%2F10%2F10%2F1851%2F18424ce84281de7cc46e9d7a55b9132e9e52_ugcvideo_270P_01_origin_s152.jpg&type=ac312_180" data-lazy-load="1" width="156" height="90" alt="수원시 영통구 영통동... 벽적골주공9단지 미세먼지..." onError="$Element(this).className('bg_nimg2').attr({src:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',alt:'이미지준비중'})"> <i class="spnew api_ico_video quick">동영상 바로재생</i>
+                                    <div class="play"><span class="blind">재생시간</span><span aria-label="00:00:07">00:07</span></div>
+                                    <i class="spnew ico_video_play">재생중</i>
+                                 </a>
+                                 <div class="info_area">
+                                    <a href="http://m.blog.naver.com/moonsun_kong/221114284072" onClick="goOtherCR(this, 'a=vdo_bas*d.tit&r=6&i=90000003_00000000000000337B703828&u='+urlencode(this.href))" class="info_title " > 수원시 <mark>영통구</mark> 영통동... 벽적골주공9단지 <mark>미세먼지</mark>... </a>
+                                    <div class="info_sub elss">
+                                       <div class="dsc group"> <span class="date">7달 전</span> <a href="http://blog.naver.com/moonsun_kong" onclick="goOtherCR(this, 'a=vdo_bas*d.cha&r=6&i=90000003_00000000000000337B703828&u='+urlencode(this.href))" class="channel elss">굿홈케어</a> </div>
+                                       <div class="dsc"><span class="origin">네이버 블로그</span></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </li>
+                           <li class="bx _item" data-index="6">
+                              <div class="video_bx">
+                                 <a onClick="tCR('a=vdo_bas*d.thu&r=7&i=90000003_00000000000000337B703828&u=javascript');return false;" class="thumb_area _trigger" data-api="https://s.search.naver.com/p/videosearch/search.naver?ssl=1&where=inkey&vid=90000003_00000000000000337B703828:13&ie=&ie=utf8&rev=33">
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblogucc28%2F2017%2F10%2F10%2F1334%2F63b9214fbcdb3705b4b8437dcc73f66c3f65_ugcvideo_270P_01_16x9_s152.jpg&type=ac312_180" data-lazy-load="1" width="156" height="90" alt="수원시 영통구 영통동... 벽적골주공9단지 미세먼지..." onError="$Element(this).className('bg_nimg2').attr({src:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',alt:'이미지준비중'})"> <i class="spnew api_ico_video quick">동영상 바로재생</i>
+                                    <div class="play"><span class="blind">재생시간</span><span aria-label="00:00:12">00:12</span></div>
+                                    <i class="spnew ico_video_play">재생중</i>
+                                 </a>
+                                 <div class="info_area">
+                                    <a href="http://m.blog.naver.com/moonsun_kong/221114284072" onClick="goOtherCR(this, 'a=vdo_bas*d.tit&r=7&i=90000003_00000000000000337B703828&u='+urlencode(this.href))" class="info_title " > 수원시 <mark>영통구</mark> 영통동... 벽적골주공9단지 <mark>미세먼지</mark>... </a>
+                                    <div class="info_sub elss">
+                                       <div class="dsc group"> <span class="date">7달 전</span> <a href="http://blog.naver.com/moonsun_kong" onclick="goOtherCR(this, 'a=vdo_bas*d.cha&r=7&i=90000003_00000000000000337B703828&u='+urlencode(this.href))" class="channel elss">굿홈케어</a> </div>
+                                       <div class="dsc"><span class="origin">네이버 블로그</span></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </li>
+                           <li class="bx _item" data-index="7">
+                              <div class="video_bx">
+                                 <a onClick="tCR('a=vdo_bas*d.thu&r=8&i=90000003_00000000000000337D34E173&u=javascript');return false;" class="thumb_area _trigger" data-api="https://s.search.naver.com/p/videosearch/search.naver?ssl=1&where=inkey&vid=90000003_00000000000000337D34E173:2&ie=&ie=utf8&rev=33">
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblogucc28%2F2017%2F11%2F20%2F375%2Fa7a808f74f97d3c11a84eb0a3556f591c397_ugcvideo_270P_01_16x9_s152.jpg&type=ac312_180" data-lazy-load="1" width="156" height="90" alt="영통구 원천동 삼성아파트 수도배관..." onError="$Element(this).className('bg_nimg2').attr({src:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',alt:'이미지준비중'})"> <i class="spnew api_ico_video quick">동영상 바로재생</i>
+                                    <div class="play"><span class="blind">재생시간</span><span aria-label="00:00:15">00:15</span></div>
+                                    <i class="spnew ico_video_play">재생중</i>
+                                 </a>
+                                 <div class="info_area">
+                                    <a href="http://m.blog.naver.com/calaflower/221143949683" onClick="goOtherCR(this, 'a=vdo_bas*d.tit&r=8&i=90000003_00000000000000337D34E173&u='+urlencode(this.href))" class="info_title " > <mark>영통구 원천동</mark> 삼성아파트 수도배관... </a>
+                                    <div class="info_sub elss">
+                                       <div class="dsc group"> <span class="date">6달 전</span> <a href="http://blog.naver.com/calaflower" onclick="goOtherCR(this, 'a=vdo_bas*d.cha&r=8&i=90000003_00000000000000337D34E173&u='+urlencode(this.href))" class="channel elss">♡ 수원수도119 ♡</a> </div>
+                                       <div class="dsc"><span class="origin">네이버 블로그</span></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </li>
+                           <li class="bx _item" data-index="8">
+                              <div class="video_bx">
+                                 <a onClick="tCR('a=vdo_bas*d.thu&r=9&i=90000003_00000000000000337CCF7EEB&u=javascript');return false;" class="thumb_area _trigger" data-api="https://s.search.naver.com/p/videosearch/search.naver?ssl=1&where=inkey&vid=90000003_00000000000000337CCF7EEB:10&ie=&ie=utf8&rev=33">
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblogucc28%2F2017%2F11%2F10%2F1646%2F01dd3a2de48aeb27c0368e44f4fa8cc17d3c_ugcvideo_270P_01_16x9_s152.jpg&type=ac312_180" data-lazy-load="1" width="156" height="90" alt="수원시 영통구 망포역... 미세먼지 막는 미세방충망..." onError="$Element(this).className('bg_nimg2').attr({src:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',alt:'이미지준비중'})"> <i class="spnew api_ico_video quick">동영상 바로재생</i>
+                                    <div class="play"><span class="blind">재생시간</span><span aria-label="00:00:12">00:12</span></div>
+                                    <i class="spnew ico_video_play">재생중</i>
+                                 </a>
+                                 <div class="info_area">
+                                    <a href="http://m.blog.naver.com/moonsun_kong/221137305323" onClick="goOtherCR(this, 'a=vdo_bas*d.tit&r=9&i=90000003_00000000000000337CCF7EEB&u='+urlencode(this.href))" class="info_title " > 수원시 <mark>영통구</mark> 망포역... <mark>미세먼지</mark> 막는 <mark>미세</mark>방충망... </a>
+                                    <div class="info_sub elss">
+                                       <div class="dsc group"> <span class="date">6달 전</span> <a href="http://blog.naver.com/moonsun_kong" onclick="goOtherCR(this, 'a=vdo_bas*d.cha&r=9&i=90000003_00000000000000337CCF7EEB&u='+urlencode(this.href))" class="channel elss">굿홈케어</a> </div>
+                                       <div class="dsc"><span class="origin">네이버 블로그</span></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </li>
+                           <li class="bx _item" data-index="9">
+                              <div class="video_bx">
+                                 <a onClick="tCR('a=vdo_bas*d.thu&r=10&i=90000003_00000000000000337C554402&u=javascript');return false;" class="thumb_area _trigger" data-api="https://s.search.naver.com/p/videosearch/search.naver?ssl=1&where=inkey&vid=90000003_00000000000000337C554402:11&ie=&ie=utf8&rev=33">
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblogucc28%2F2017%2F10%2F31%2F586%2Fcbee0a67c601083fdc33f1006b5b93f4d796_ugcvideo_270P_01_origin_s152.jpg&type=ac312_180" data-lazy-load="1" width="156" height="90" alt="수원시 영통구 광교역... e편한세상 미세먼지 막는..." onError="$Element(this).className('bg_nimg2').attr({src:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',alt:'이미지준비중'})"> <i class="spnew api_ico_video quick">동영상 바로재생</i>
+                                    <div class="play"><span class="blind">재생시간</span><span aria-label="00:00:07">00:07</span></div>
+                                    <i class="spnew ico_video_play">재생중</i>
+                                 </a>
+                                 <div class="info_area">
+                                    <a href="http://m.blog.naver.com/moonsun_kong/221129294850" onClick="goOtherCR(this, 'a=vdo_bas*d.tit&r=10&i=90000003_00000000000000337C554402&u='+urlencode(this.href))" class="info_title " > 수원시 <mark>영통구</mark> 광교역... e편한세상 <mark>미세먼지</mark> 막는... </a>
+                                    <div class="info_sub elss">
+                                       <div class="dsc group"> <span class="date">7달 전</span> <a href="http://blog.naver.com/moonsun_kong" onclick="goOtherCR(this, 'a=vdo_bas*d.cha&r=10&i=90000003_00000000000000337C554402&u='+urlencode(this.href))" class="channel elss">굿홈케어</a> </div>
+                                       <div class="dsc"><span class="origin">네이버 블로그</span></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </li>
+                           <li class="bx"> <a href="?where=m_video&sort=&period=&playtime=&stype=&nso=&sm=mtb_nmr&query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80#item_index11" onclick="return goOtherCR(this, 'a=vdo.ctmoret&r=&i=&u='+urlencode(this.href))" class="api_list_more"> <span class="api_more_info"> <span class="spnew api_loader"><span class="spnew _circle_gauge" style="width:50%;"></span></span>이어서<br>더보기 </span> </a> </li>
+                        </ul>
+                     </div>
+                     <div class="video_common_player_wrap _target"></div>
+                     <div class="video_common_player_wrap _target"></div>
+                     <div class="video_common_player_wrap _target"></div>
+                     <div class="video_common_player_wrap _target"></div>
+                     <div class="video_common_player_wrap _target"></div>
+                     <div class="video_common_player_wrap _target"></div>
+                     <div class="video_common_player_wrap _target"></div>
+                     <div class="video_common_player_wrap _target"></div>
+                     <div class="video_common_player_wrap _target"></div>
+                     <div class="video_common_player_wrap _target"></div>
+                  </div>
+               </div>
+               <div class="api_more_wrap"> <a href="?where=m_video&sort=&period=&playtime=&stype=&nso=&sm=mtb_nmr&query=%EC%98%81%ED%86%B5%EA%B5%AC+%EC%9B%90%EC%B2%9C%EB%8F%99+%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80" onclick="return goOtherCR(this, 'a=vdo.more&r=&i=&u='+urlencode(this.href))" class="api_more">동영상 더보기<i class="spnew ico_arr"></i></a> </div>
+               <script type="text/template" id="_youtubeVideoTemplate"> <div class="video_common_player"> <div class="video_player"> <div class="player_inner"> <iframe type="text/html"
