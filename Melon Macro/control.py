@@ -1,4 +1,3 @@
-# 202656 202971
 import os
 import sys
 import datetime
@@ -6,9 +5,12 @@ from time import sleep
 from selenium import webdriver
 from pynput.keyboard import Key, Controller
 
-dir = os.getcwd() + '\\IEDriverServer.exe'
-driver = webdriver.Ie(dir)
+#dir = os.getcwd() + '\\IEDriverServer.exe'
+dir = os.getcwd() + '\\chromedriver.exe'
+driver = webdriver.Chrome(dir)
 
+driver.get("http://sugang.ajou.ac.kr")
+"""
 # attempt to logging in
 driver.get('https://ticket.melon.com/concert/index.htm')
 driver.find_element_by_xpath('//a[@class="btn_gnb btn_g_login"]').click()
@@ -25,6 +27,13 @@ driver.execute_script("document.getElementsByClassName('box_ticketing_process')[
 target_time = datetime.datetime(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day, int(sys.argv[6]), int(sys.argv[7]) - 1, 59, 800000)
 while (target_time - datetime.datetime.now()).total_seconds() > 0 :
     print('Countdown : ' + str(target_time - datetime.datetime.now()), end='\r')
+print()
+"""
+print()
+# wait for starting time
+target_time = datetime.datetime(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day, 9, 59, 59, 800000)
+while (target_time - datetime.datetime.now()).total_seconds() > 0 :
+    print('Targetting Start Time Countdown : ' + str(target_time - datetime.datetime.now()), end='\r')
 print()
 
 # select targetted date and time
