@@ -2,24 +2,24 @@
 #include <Windows.h>
 #include <stdio.h>
 
-// ì‹¤ìŠµ3. ë¬¸ì œ(1) í­íƒ„ ì˜í–¥ ì§€ì—­ ê²€ì¶œ (type1 or type2)
+// ½Ç½À3. ¹®Á¦(1) ÆøÅº ¿µÇâ Áö¿ª °ËÃâ (type1 or type2)
 
-// ë¬¸ì œì¼ë¶€ ì§€ì—­(15X15:region)ì´ ì¡´ìž¬í•œë‹¤ê³  ê°€ì •í–ˆì„ ë•Œ,
-// ì´ ì§€ì—­ì— íˆ¬í•˜ì‹œí‚¬ í­íƒ„ì˜ ìœ„ì¹˜ë¥¼ ìž…ë ¥ ë°›ëŠ”ë‹¤.
-// íˆ¬í•˜ëœ í­íƒ„ì€ í­íƒ„ì˜ ì¢…ë¥˜ì— ë”°ë¼ ìƒí•˜ì¢Œìš°ë¡œ ì˜í–¥ì„ ë¯¸ì¹œë‹¤.
-// Aí­íƒ„ì€ +1, Bí­íƒ„ì€ +2, Cí­íƒ„ì€ +3ì˜ ì˜í–¥ë ¥ê³¼ íŒŒê´´ë ¥ì„ ê°–ëŠ”ë‹¤.
-// ì¢Œí‘œì˜ ì‹œìž‘ì€ (0,0)ë¶€í„° ì‹œìž‘
+// ¹®Á¦ÀÏºÎ Áö¿ª(15X15:region)ÀÌ Á¸ÀçÇÑ´Ù°í °¡Á¤ÇßÀ» ¶§,
+// ÀÌ Áö¿ª¿¡ ÅõÇÏ½ÃÅ³ ÆøÅºÀÇ À§Ä¡¸¦ ÀÔ·Â ¹Þ´Â´Ù.
+// ÅõÇÏµÈ ÆøÅºÀº ÆøÅºÀÇ Á¾·ù¿¡ µû¶ó »óÇÏÁÂ¿ì·Î ¿µÇâÀ» ¹ÌÄ£´Ù.
+// AÆøÅºÀº +1, BÆøÅºÀº +2, CÆøÅºÀº +3ÀÇ ¿µÇâ·Â°ú ÆÄ±«·ÂÀ» °®´Â´Ù.
+// ÁÂÇ¥ÀÇ ½ÃÀÛÀº (0,0)ºÎÅÍ ½ÃÀÛ
 
-// ex1. Aí­íƒ„ - (3,5) ìœ„ì¹˜ì— íˆ¬í•˜
-// (3,5)ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ì™¸ê³½ì— +1ì˜ ë‘ê»˜ë¡œ ë‘˜ëŸ¬ ìŒ“ì¸ ëª¨ë“  ì˜ì—­ì— ì˜í–¥ì„ ë¯¸ì¹˜ë©°, íŒŒê´´ëœ ì •ë„ëŠ” +1 ì¦ê°€
-// (2,4),(2,5),(2,6),(3,4),(3,5),(3,6),(4,4),(4,5),(4,6) ìœ¼ë¡œ ì˜í–¥ì„ ë¯¸ì¹˜ë©°, íŒŒê´´ëœ ì •ë„ëŠ” +1 ì¦ê°€
+// ex1. AÆøÅº - (3,5) À§Ä¡¿¡ ÅõÇÏ
+// (3,5)¸¦ ±âÁØÀ¸·Î ¿Ü°û¿¡ +1ÀÇ µÎ²²·Î µÑ·¯ ½×ÀÎ ¸ðµç ¿µ¿ª¿¡ ¿µÇâÀ» ¹ÌÄ¡¸ç, ÆÄ±«µÈ Á¤µµ´Â +1 Áõ°¡
+// (2,4),(2,5),(2,6),(3,4),(3,5),(3,6),(4,4),(4,5),(4,6) À¸·Î ¿µÇâÀ» ¹ÌÄ¡¸ç, ÆÄ±«µÈ Á¤µµ´Â +1 Áõ°¡
 
-// ex2. Bí­íƒ„ - (4,7) ìœ„ì¹˜ì— íˆ¬í•˜
-// (4,7)ì˜ ìœ„ì¹˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ +2 ë‘ê»˜ì˜ ì™¸ê³½ ì§€ì—­ì— ì˜í–¥ì„ ë¯¸ì¹¨.
-// ê° ì§€ì—­ì´ íŒŒê´´ëœ ì •ë„ëŠ” +2ë¡œ ì˜¬ë¼ê°„ë‹¤. ì´ ë•Œ, ê¸°ì¡´ì— íŒŒê´´ë˜ì—ˆë˜ ê³³ì€ ì¤‘ì²©ë¨.
+// ex2. BÆøÅº - (4,7) À§Ä¡¿¡ ÅõÇÏ
+// (4,7)ÀÇ À§Ä¡¸¦ ±âÁØÀ¸·Î +2 µÎ²²ÀÇ ¿Ü°û Áö¿ª¿¡ ¿µÇâÀ» ¹ÌÄ§.
+// °¢ Áö¿ªÀÌ ÆÄ±«µÈ Á¤µµ´Â +2·Î ¿Ã¶ó°£´Ù. ÀÌ ¶§, ±âÁ¸¿¡ ÆÄ±«µÇ¾ú´ø °÷Àº ÁßÃ¸µÊ.
 
-// ì´ì™€ ê°™ì€ ë°©ì‹ìœ¼ë¡œ íˆ¬í•˜ëœ í­íƒ„ì„ ìž…ë ¥ë°›ì•„ ì´ë¡œë¶€í„°ì˜ ì˜í–¥ë ¥ì„ í™•ì¸í•˜ê³ , ì˜í–¥ì„ ë°›ì§€ ì•Šì€ ì§€ì—­ì„
-// í™•ì¸í•œë‹¤. (ì´ˆê¸° ìƒíƒœëŠ” ëª¨ë‘ ì˜í–¥ ë°›ì§€ ì•Šì€ ìƒíƒœ (íŒŒê´´ì •ë„(ë°°ì—´ì•ˆì˜ ê°’):0))
+// ÀÌ¿Í °°Àº ¹æ½ÄÀ¸·Î ÅõÇÏµÈ ÆøÅºÀ» ÀÔ·Â¹Þ¾Æ ÀÌ·ÎºÎÅÍÀÇ ¿µÇâ·ÂÀ» È®ÀÎÇÏ°í, ¿µÇâÀ» ¹ÞÁö ¾ÊÀº Áö¿ªÀ»
+// È®ÀÎÇÑ´Ù. (ÃÊ±â »óÅÂ´Â ¸ðµÎ ¿µÇâ ¹ÞÁö ¾ÊÀº »óÅÂ (ÆÄ±«Á¤µµ(¹è¿­¾ÈÀÇ °ª):0))
 
 void print_Region(int region[][15]);
 void put_Abomb(int region[][15], int Abomb_x, int Abomb_y);
@@ -45,14 +45,14 @@ int main(void)
 
 		print_Region(region);
 		printf("=========================================\n\n");
-		printf("íˆ¬í•˜í•˜ê³  ì‹¶ì€ í­íƒ„ì˜ ì¢…ë¥˜ë¥¼ ì„ íƒí•˜ì„¸ìš”.(A,B,C) \n");
-		printf("ì¢…ë£Œë¥¼ ì›í•˜ì‹œë©´ Fë¥¼ ìž…ë ¥í•˜ì„¸ìš”.\n");
+		printf("ÅõÇÏÇÏ°í ½ÍÀº ÆøÅºÀÇ Á¾·ù¸¦ ¼±ÅÃÇÏ¼¼¿ä.(A,B,C) \n");
+		printf("Á¾·á¸¦ ¿øÇÏ½Ã¸é F¸¦ ÀÔ·ÂÇÏ¼¼¿ä.\n");
 		scanf("%c", &type);
 
 		switch (type)
 		{
 		case 'A':
-			printf("Aí­íƒ„ì„ íˆ¬í•˜í•  ìœ„ì¹˜ë¥¼ ìž…ë ¥í•´ì£¼ì„¸ìš”(ex. 3,3)\n");
+			printf("AÆøÅºÀ» ÅõÇÏÇÒ À§Ä¡¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä(ex. 3,3)\n");
 			scanf("%d, %d", &bomb_x, &bomb_y);
 
 			put_Abomb(region, bomb_x, bomb_y);
@@ -61,7 +61,7 @@ int main(void)
 			break;
 
 		case 'B':
-			printf("Bí­íƒ„ì„ íˆ¬í•˜í•  ìœ„ì¹˜ë¥¼ ìž…ë ¥í•´ì£¼ì„¸ìš”(ex. 3,3)\n");
+			printf("BÆøÅºÀ» ÅõÇÏÇÒ À§Ä¡¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä(ex. 3,3)\n");
 			scanf("%d, %d", &bomb_x, &bomb_y);
 
 			put_Bbomb(region, bomb_x, bomb_y);
@@ -70,7 +70,7 @@ int main(void)
 			break;
 
 		case 'C':
-			printf("Cí­íƒ„ì„ íˆ¬í•˜í•  ìœ„ì¹˜ë¥¼ ìž…ë ¥í•´ì£¼ì„¸ìš”(ex. 3,3)\n");
+			printf("CÆøÅºÀ» ÅõÇÏÇÒ À§Ä¡¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä(ex. 3,3)\n");
 			scanf("%d, %d", &bomb_x, &bomb_y);
 
 			put_Cbomb(region, bomb_x, bomb_y);
@@ -79,7 +79,7 @@ int main(void)
 			break;
 
 		case 'F':
-			printf("í”„ë¡œê·¸ëž¨ì´ ì¢…ë£Œë©ë‹ˆë‹¤\n");
+			printf("ÇÁ·Î±×·¥ÀÌ Á¾·áµË´Ï´Ù\n");
 			num = 1;
 		}
 	}
@@ -109,7 +109,7 @@ void put_Abomb(int region[][15], int Abomb_x, int Abomb_y)
 	int itrX, itrY;
 
 	if (Abomb_x < 0 || Abomb_x >= 15 || Abomb_y < 0 || Abomb_y >= 15)
-		printf("íˆ¬í•˜í•  ìˆ˜ ì—†ëŠ” ìœ„ì¹˜ìž…ë‹ˆë‹¤.\n");
+		printf("ÅõÇÏÇÒ ¼ö ¾ø´Â À§Ä¡ÀÔ´Ï´Ù.\n");
 	else
 	{
 		xStart = Abomb_x - 1;
@@ -129,10 +129,10 @@ void put_Abomb(int region[][15], int Abomb_x, int Abomb_y)
 
 void put_Bbomb(int region[][15], int Bbomb_x, int Bbomb_y)
 {
-	// ë¬¸ì œ(1) - êµ¬í˜„1(type1 or type2)
+	// ¹®Á¦(1) - ±¸Çö1(type1 or type2)
 }
 
 void put_Cbomb(int region[][15], int Cbomb_x, int Cbomb_y)
 {
-	// ë¬¸ì œ(1) - êµ¬í˜„2(type1 or type2)
+	// ¹®Á¦(1) - ±¸Çö2(type1 or type2)
 }
